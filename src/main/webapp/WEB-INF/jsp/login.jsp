@@ -7,7 +7,7 @@
     	<div id="header">
     		<div id="menu">
     			<ul>
-    				<li><a href="register.jsp">Register</a></li>
+    				<li><a href="/register">Register</a></li>
     			</ul>
     		</div>
     	</div>

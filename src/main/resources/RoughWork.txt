@@ -1,0 +1,28 @@
+Department Register form -
+1. Display institute name information using drop down and give id to that select list
+2. Need to fill below information -
+    Basic Info - Name, Qualification Details, Email ID, Contact num, department name
+    Hidden details -
+        teacher type as HOD
+3. Details should save to Teacher table
+    Need to decide attributes of Teacher table
+4. Post submission user should get email stating request is submitted and sent for approval for further process.
+5. When admin approves this request, user will get email regarding approval and login details with default password.
+
+--------------
+
+Department user first login
+1. Need to ask for change password for first time login - will implement later
+2. With correct login user should see department home page
+    left pane -
+        a. send notifications
+                - combinations of teacher and student list
+
+        b. set Timetable
+                - upload photo + set class teacher for that class
+                - can re-upload photo + set class teacher many times
+
+        c. provide authorization of register requests from other teachers
+            - post approval teachers should get there login id and password
+
+

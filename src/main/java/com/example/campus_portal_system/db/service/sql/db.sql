@@ -3,7 +3,7 @@ use campus;
 
 drop table if exists institute;
 create table institute as
-select 1 as instittute_id,
+select 1 as institute_id,
 "G.S. Moze College of Engineering" as name,
 "Pune University" as university,
 "abc@moze.com" as email_id,
@@ -25,5 +25,6 @@ select * from institute;
 select * from teacher_type;
 
 DESCRIBE teacher_type;
+
 
 

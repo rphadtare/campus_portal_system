@@ -15,7 +15,7 @@
 <div id="header">
 	<div id="menu">
 		<ul>
-			<li><a href="login.jsp">Login</a></li>
+			<li><a href="/login">Login</a></li>
 		</ul>
 	</div>
 </div>
