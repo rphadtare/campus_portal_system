@@ -1,14 +1,49 @@
-Department Register form -
+*********************
+Department Module -
+*********************
+HOD Register form -
 1. Display institute name information using drop down and give id to that select list
 2. Need to fill below information -
-    Basic Info - Name, Qualification Details, Email ID, Contact num, department name
-    Hidden details -
-        teacher type as HOD
+    Basic Info - teacher table
+        id,
+        teacher_type_id,
+        institute_id,
+        dept_id,
+        identify yourself Mr./Ms./Mrs.,
+        First Name,
+        Middle Name,
+        Last Name,
+        Qualification Details,
+        Email ID,
+        Contact num,
+        is_deleted -> 0 - No, 1 - Yes
 3. Details should save to Teacher table
     Need to decide attributes of Teacher table
 4. Post submission user should get email stating request is submitted and sent for approval for further process.
-5. When admin approves this request, user will get email regarding approval and login details with default password.
+5.
+    Admin can view only 'OPEN' status requests through this table -
+    register_request
+    id,
+    request_type -> student register, teacher register and HOD register request,
+    request_information -> this should be in json format. This will include all submitted information from user,
+    approver_type_id -> teacher_type_id,
+    approver_id -> teacher_id,
+    status -> Open, approved/denied
 
+   When admin approves this request, user will get email regarding approval
+   and login details with default password.
+   LOGIN
+   id,
+   user_type -> all_user_types(id),
+   user_name -> firstname4letters_usertypeid_id e.g. rutv_6_1,
+   password -> auto generated password string of 8-12 Chracters,
+   is_deleted -> 0 - No, 1 - Yes
+
+   Also, when HOD register request will get approved default entries in tables like
+   class_details_mapping will get created
+   default entries means - 4 entries denotes 4 years and their class teacher would be HOD and timetable will have none info.
+
+ADMIN table
 --------------
 
 Department user first login
@@ -17,12 +52,45 @@ Department user first login
     left pane -
         a. send notifications
                 - combinations of teacher and student list
+                - check boxes on front end -
+                     Teacher -
+                     <>All teacher <>First Year <>Second Year <>Third Year <>Final Year
+                     All teachers - all teachers belongs to that department
+                     First/2nd/3rd/Final - class teacher of respective year
+
+                     Students -
+                     <>All Students <>First Year <>Second Year <>Third Year <>Final Year
+                     All Students - all students belongs to that department
+
+                - This will trigger mail to respective end users based on selection
+
+        view notifications
+                - Notification table will store history of these notifications.
+                    - msg -> msg given by HOD
+                    - attachment - pdfs, images etc.
+                    - end_user_list -> information about selection criteria for this notification.
+                            Basically which check boxes ticked for this.
 
         b. set Timetable
                 - upload photo + set class teacher for that class
                 - can re-upload photo + set class teacher many times
+                -
 
         c. provide authorization of register requests from other teachers
-            - post approval teachers should get there login id and password
+            In case of approval  -
+                - login entry will get create for that teacher in login table
+                - post approval teachers should get there login id and password
+                - In teacher table, record will be get active i.e. is_deleted = 0
+                - In register_request, record will be marked as 'Approved'
+
+            In case of deny  -
+                - login entry will not get create for that teacher in login table
+                - post deny teachers should get there email with disapproval message
+                - In teacher table, record will be in-active i.e. is_deleted = 1
+                - In register_request, record will be marked as 'DENIED'
+
+        d. Teacher appoint as class teacher -
+            - change teacher_type_id in teacher table of existing teacher
+            - as well as change teacher id in class_details_mapping
 
 
