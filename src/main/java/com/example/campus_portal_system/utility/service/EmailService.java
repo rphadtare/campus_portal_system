@@ -8,7 +8,7 @@ public class EmailService {
 
     @Autowired
     private JavaMailSender mailSender;
-    
+
     public void SendEmail(String toEmail,
                           String subject,
                           String body){
@@ -38,5 +38,6 @@ public class EmailService {
         System.out.println("[RegisterService]: Message sent to : " + toEmail);
 
     }
+
 
 }
