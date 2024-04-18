@@ -26,11 +26,29 @@ public class RegisterController {
 
     @RequestMapping(value = "/department_register", method = RequestMethod.GET)
     public String showDepartmentRegisterPage(Model model) {
+        /*
+            This method used to get few details before redirecting to department_register.jsp page
+         */
         List<Institute> instituteList = registerService.getAllDepartments();
         model.addAttribute("institutes", instituteList);
         return "/dept/department_register";
     }
 
+    @RequestMapping(value = "/department_register", method = RequestMethod.POST)
+    public String saveHeadOfDepartmentInformation(Model model) {
+        /*
+            This method used to store head of department registration request data for further processing
+         */
 
+        //Here we will get data from department_register.jsp page
+        //logic to get that data is yet to implement. Hence, using static data as of.
+
+
+
+
+
+
+        return "/dept/department_register";
+    }
 
 }
