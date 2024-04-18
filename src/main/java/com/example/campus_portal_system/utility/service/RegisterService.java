@@ -11,6 +11,7 @@ import com.example.campus_portal_system.utility.beans.RegisterRequest;
 import com.example.campus_portal_system.utility.beans.dao.AdminDAO;
 import com.example.campus_portal_system.utility.beans.dao.RegisterRequestDAO;
 import org.eclipse.tags.shaded.org.apache.xpath.operations.Bool;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,8 @@ import java.util.List;
 
 @Service
 public class RegisterService {
+
+    private EmailService emailService = new EmailService();
 
     public List<Institute> getAllDepartments(){
         System.out.println("[RegisterService]: Inside getAllDepartments ...");
@@ -67,9 +70,41 @@ public class RegisterService {
         System.out.println("[RegisterService]: Inside registerTeacher ...");
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DatabaseConfig.class);
         TeacherDAO teacherDAO = context.getBean(TeacherDAO.class);
-        return teacherDAO.createTeacher(teacher);
 
+        //To check admin details for given institute id
+        Admin admin = this.getAdminByInstituteId(teacher.getInstituteId());
+        if(admin == null){
+            //no admin is found for given institute.
+            //Hence, request could not be complete further
+            System.out.println("[RegisterService]: Admin details are not present for institute id " + admin.getInstituteId());
+
+            //Sending email to institute regarding this error
+
+
+            return false;
+        }
+
+        System.out.println("[RegisterService]: Admin details fetch successfully for institute id : " + admin.getInstituteId());
+
+        // store register request details in database system
+        RegisterRequest registerRequest =
+                new RegisterRequest(1,"HOD Register",teacher.toString(), admin.getAdminTypeId(),admin.getAdminId(),"OPEN");
+
+        boolean registerTeacherFlag = teacherDAO.createTeacher(teacher);
+        boolean registerRequestFlag = this.storeRequestDetails(registerRequest);
+
+        System.out.println("[RegisterService]: register teacher status : " +
+                "" + registerTeacherFlag  + "" +
+                "register request status " + registerRequestFlag);
+
+        if(registerTeacherFlag && registerRequestFlag) {
+            return true;
+        } else {
+            return false;
+        }
     }
+
+
 
 
 

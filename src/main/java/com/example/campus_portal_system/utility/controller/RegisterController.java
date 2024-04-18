@@ -76,38 +76,15 @@ public class RegisterController {
         Teacher teacher = new Teacher(0,instituteId,departmentId,teacherTypeId,salutations,
                 firstName,middleName,lastName,qualifications,emailId,contactNo,isDeleted);
 
+        boolean flag = registerService.registerTeacher(teacher);
+        System.out.println("[RegisterController]: status of  department_register " + flag);
 
-        //To check admin details for given institute id
-        Admin admin = registerService.getAdminByInstituteId(instituteId);
-        if(admin == null){
-            //no admin is found for given institute.
-            //Hence, request could not be complete further
-            return "no_admin";
-        }
-
-        System.out.println("[RegisterController]: Admin details fetch successfully for institute id : " + instituteId);
-
-        // store register request details in database system
-        RegisterRequest registerRequest =
-                new RegisterRequest(1,"HOD Register",teacher.toString(),
-                        admin.getAdminTypeId(),admin.getAdminId(),"OPEN");
-
-        boolean registerTeacherFlag = registerService.registerTeacher(teacher);
-        boolean registerRequestFlag = registerService.storeRequestDetails(registerRequest);
-
-        System.out.println("[RegisterController]: register teacher status : " +
-                "" + registerTeacherFlag  + "" +
-                "register request status " + registerRequestFlag);
-
-
-        if(registerTeacherFlag && registerRequestFlag) {
-            return "department_register_success";
+        if(flag){
+            return "next_step_post_successful_registartion";
         } else {
-            return "department_register_failed";
+            return "error";
         }
-
     }
-
 
 
 
