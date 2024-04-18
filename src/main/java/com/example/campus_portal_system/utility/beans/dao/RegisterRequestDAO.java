@@ -11,4 +11,6 @@ public interface RegisterRequestDAO {
 
     public Boolean updateStatusOfRequest(RegisterRequest registerRequest);
 
+    public Boolean createRequest(RegisterRequest registerRequest);
+
 }

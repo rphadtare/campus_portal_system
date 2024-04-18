@@ -25,6 +25,10 @@ public class RegisterRequestDAOImpl implements  RegisterRequestDAO {
             "status = ?" +
             "where id = ?";
 
+    public final String SQL_CREATE_REQUEST = "insert into register_request" +
+            "(request_type,request_information,approver_type_id,approver_id,status)" +
+            "values(?,?,?,?,?)";
+
     @Override
     public List<RegisterRequest> getRequests(int userTypeIdForApproval, int userIdForApproval) {
         System.out.println("[RegisterRequestDAOImpl]: Inside getRequests ...");
@@ -40,6 +44,19 @@ public class RegisterRequestDAOImpl implements  RegisterRequestDAO {
                 SQL_UPDATE_STATUS_OF_REQUEST,
                 registerRequest.getStatus(),
                 registerRequest.getId()
+        ) > 0;
+    }
+
+    @Override
+    public Boolean createRequest(RegisterRequest registerRequest) {
+        System.out.println("[RegisterRequestDAOImpl]: Inside updateStatusOfRequest ...");
+        return jdbcTemplate.update(
+                SQL_CREATE_REQUEST,
+                registerRequest.getrequestType(),
+                registerRequest.getRequestInformation(),
+                registerRequest.getApproveByTypeId(),
+                registerRequest.getApproveById(),
+                registerRequest.getStatus()
         ) > 0;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.campus_portal_system.utility.beans.dao;
 
 import com.example.campus_portal_system.utility.beans.Admin;
+import com.example.campus_portal_system.utility.beans.mapper.AdminMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -64,6 +65,6 @@ public class AdminDAOImpl implements AdminDAO {
     @Override
     public Admin getAdminInfo(int instituteId) {
         System.out.println("[AdminDAOImpl]: Inside getAdminInfo ...");
-        return null;
+        return jdbcTemplate.queryForObject(SQL_GET_ADMIN_INFO, new Object[]{instituteId}, new AdminMapper());
     }
 }

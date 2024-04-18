@@ -23,4 +23,12 @@ public class LoginService {
         return result;
 
     }
+
+    public boolean provideLoginToUser(){
+
+
+        return true;
+    }
+
+
 }
