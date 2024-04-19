@@ -1,0 +1,9 @@
+Dear user,
+Thank you for trying to register with campus portal system.
+However, unfortunately admin account is already present for institute - institute_name.
+Hence, we are currently not proceeding ahead with your registration request.
+
+Have a good day ahead!
+
+Best regards,
+Campus Portal System

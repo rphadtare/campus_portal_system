@@ -103,11 +103,31 @@ public class RegisterService {
         RegisterRequestDAO registerRequestDAO = context.getBean(RegisterRequestDAO.class);
         InstituteDAO instituteDAO = context.getBean(InstituteDAO.class);
 
+
         //Fetch email id from institute table
         Institute institute = instituteDAO.getInstituteById(admin.getInstituteId());
         logger.info("registerAdmin - fetched institute details " + institute);
 
         if(institute.getInstitute_id() != -1){
+
+            //check if admin is present for that institute or not
+            //if yes then reject this registration request and send email to user stating admin exist already
+            if(adminDAO.checkIfAdminExistForInstitute(admin.getInstituteId())){
+                logger.severe("registerAdmin - admin already exist for : " + institute.getName());
+
+                //sending mail to user
+                String message = EmailMessageUtil.fetchMessageTemplate("admin_already_exist")
+                        .replaceAll("user",admin.getFullName())
+                        .replaceAll("institute_name", institute.getName());
+
+                logger.info(" message for user: " + message);
+
+                emailService.SendEmail(admin.getEmailId(),
+                        institute.getEmail_id(), "Admin registration failed !!", message);
+
+                return false;
+            }
+
             //random pass code which will be provided to institute to authenticate admin at later stage
             String passCode = Helper.getPassCode();
 
@@ -168,9 +188,17 @@ public class RegisterService {
         }
     }
 
+
+    public boolean registerHeadOfDepartment(){
+
+
+        return false;
+    }
+
+
     public Boolean registerTeacher(Teacher teacher){
         /*
-            To submit new request of teacher or head of department into submit
+            To submit new request of teacher or head of department into system
          */
 
         logger.info(" Inside registerTeacher ... " + teacher);
@@ -181,7 +209,7 @@ public class RegisterService {
         Admin admin = this.getAdminByInstituteId(teacher.getInstituteId());
         logger.info(" Inside registerTeacher admin details received: " + admin);
 
-        if(admin.getAdminId() == -1){
+        if(admin.getAdminId() == -1) {
             //no admin is found for given institute.
             //Hence, request could not be complete further
             logger.info(" Admin details are not present for institute id " + teacher.getInstituteId());
@@ -234,6 +262,9 @@ public class RegisterService {
             return false;
         }
     }
+
+
+
 
 
 

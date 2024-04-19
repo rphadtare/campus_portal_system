@@ -34,6 +34,8 @@ public class AdminDAOImpl implements AdminDAO {
     private final String SQL_GET_ADMIN_INFO_BY_INSTITUTE_AND_EMAIL_ID = "select * from admin where institute_id = ?" +
             " and email_id = ?";
 
+    private final String SQL_CHECK_ADMIN_EXIST_FOR_INSTITUTE = "select * from admin where institute_id = ? limit 1";
+
     @Autowired
     public AdminDAOImpl(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
@@ -122,5 +124,26 @@ public class AdminDAOImpl implements AdminDAO {
                     "exception occurred - " + e.getMessage());
         }
         return new Admin(-1);
+    }
+
+    @Override
+    public Boolean checkIfAdminExistForInstitute(int instituteId) {
+        logger.info("Inside checkIfAdminExistForInstitute for institute id : " + instituteId);
+        Admin admin = new Admin(-1);
+
+        try{
+            admin = jdbcTemplate.queryForObject(SQL_CHECK_ADMIN_EXIST_FOR_INSTITUTE,
+                    new Object[]{instituteId}, new AdminMapper());
+
+        } catch (Exception e) {
+            logger.severe("Inside checkIfAdminExistForInstitute for institute id : " + instituteId +
+                    "exception occurred - " + e.getMessage());
+        }
+
+        if(admin.getAdminId() == -1){
+            return false;
+        } else {
+            return true;
+        }
     }
 }

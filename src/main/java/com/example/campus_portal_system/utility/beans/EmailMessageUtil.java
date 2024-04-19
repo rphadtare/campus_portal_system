@@ -33,6 +33,10 @@ public class EmailMessageUtil {
                 fileName = "admin_not_present.txt";
                 break;
 
+            case "admin_already_exist":
+                fileName = "admin_already_exist.txt";
+                break;
+
             case "admin_passcode":
                 fileName = "admin_passcode_message.txt";
                 break;

@@ -12,4 +12,6 @@ public interface AdminDAO {
 
     public Admin getAdminInfo(int instituteId, String emailId);
 
+    public Boolean checkIfAdminExistForInstitute(int instituteId);
+
 }

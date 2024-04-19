@@ -74,7 +74,8 @@ public class RegisterController {
         /*
             This method used to register admin for given institute id
          */
-        Admin admin = new Admin(1,instituteId,1,salutations,firstName,middleName,lastName,
+        Admin admin = new Admin(1,instituteId,UserTypes.INSTITUTE_ADMIN.getNumVal(),
+                salutations,firstName,middleName,lastName,
                 qualifications,emailId,contactNo,0);
 
         logger.info("Inside admin_register to register - " + admin);
