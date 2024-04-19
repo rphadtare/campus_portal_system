@@ -12,6 +12,15 @@ public class EmailMessageUtil {
 
         String fileName = "";
         switch (type){
+            case "institute_onboard_success":
+                fileName = "institute_onboarding_success.txt";
+                break;
+
+            case "institute_onboard_failed":
+                fileName = "institute_onboarding_failed.txt";
+                break;
+
+
             case "registration":
                 fileName = "registration_successful_message.txt";
                 break;

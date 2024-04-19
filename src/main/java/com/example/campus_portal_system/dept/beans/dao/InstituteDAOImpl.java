@@ -4,9 +4,11 @@ import com.example.campus_portal_system.dept.beans.Institute;
 import com.example.campus_portal_system.dept.beans.mapper.InstituteMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.sql.ResultSet;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -32,7 +34,11 @@ public class InstituteDAOImpl implements InstituteDAO {
 
     private final String SQL_UPDATE_INSTITUTE_BY_ID = "update institute set name=?, university = ?, email_id = ?, address = ? where institute_id = ?";
 
-    private final String SQL_CREATE_INSTITUTE = "insert into institute values(?,?,?,?,?)";
+    private final String SQL_CREATE_INSTITUTE = "insert into institute(name,university,email_id,address) values(?,?,?,?)";
+
+    private final String SQL_CHECK_INSTITUTE_EXIST = "select * from institute " +
+            "where " +
+            "name = ? and email_id = ?";
 
     @Override
     public Institute getInstituteById(int id) {
@@ -58,6 +64,10 @@ public class InstituteDAOImpl implements InstituteDAO {
         return jdbcTemplate.update(SQL_DELETE_INSTITUTE_BY_ID, institute.getInstitute_id()) > 0;
     }
 
+    public boolean deleteInstitute(int id) {
+        return jdbcTemplate.update(SQL_DELETE_INSTITUTE_BY_ID, id) > 0;
+    }
+
     @Override
     public boolean updateInstitute(Institute institute) {
         return jdbcTemplate.update(SQL_UPDATE_INSTITUTE_BY_ID, institute.getName(), institute.getUniversity(),
@@ -67,8 +77,33 @@ public class InstituteDAOImpl implements InstituteDAO {
 
     @Override
     public boolean createInstitute(Institute institute) {
-        return jdbcTemplate.update(SQL_CREATE_INSTITUTE, institute.getInstitute_id(),
+        logger.info("Inside createInstitute to register institute - " + institute);
+        return jdbcTemplate.update(SQL_CREATE_INSTITUTE,
                 institute.getName(), institute.getUniversity(),
                 institute.getEmail_id(), institute.getAddress()) > 0;
+    }
+
+    @Override
+    public boolean checkExist(Institute institute) {
+        logger.info("Inside checkExist to check institute exist or not - " + institute);
+        Institute institute1 = new Institute();
+
+        try {
+            institute1 = jdbcTemplate.queryForObject(SQL_CHECK_INSTITUTE_EXIST,
+                    new Object[]{institute.getName(), institute.getEmail_id()},
+                    new InstituteMapper());
+        } catch (Exception e) {
+            logger.severe("Exception in checkExist - " + e.getMessage());
+            institute1.setInstitute_id(-1);
+        }
+         boolean result = true;
+
+        if(institute1.getInstitute_id() == -1){
+            result = false;
+        }
+
+        logger.info("checkExist - result of institute exist or not - " + institute + " is " + result);
+
+        return result;
     }
 }

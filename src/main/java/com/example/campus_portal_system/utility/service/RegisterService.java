@@ -64,8 +64,39 @@ public class RegisterService {
     }
 
     public Boolean registerInstitute(Institute institute) {
+        logger.info(" Inside registerInstitute ..." + institute);
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DatabaseConfig.class);
+        InstituteDAO instituteDAO = context.getBean(InstituteDAO.class);
+        boolean result = false;
+        result = instituteDAO.checkExist(institute);
 
-        return false;
+        if(!result){
+
+            result = instituteDAO.createInstitute(institute);
+            if(result){
+                //successfully registered and send email on institute id
+                String message = EmailMessageUtil.fetchMessageTemplate("institute_onboard_success")
+                        .replaceAll("institute",institute.getName());
+
+                logger.info(" message for user: " + message);
+
+                emailService.SendEmail(institute.getEmail_id(), "Onboarded successfully!!", message);
+
+            } else {
+                //successfully registered and send email on institute id
+                String message = EmailMessageUtil.fetchMessageTemplate("institute_onboard_failed")
+                        .replaceAll("institute",institute.getName());
+
+                logger.info(" message for user: " + message);
+
+                emailService.SendEmail(institute.getEmail_id(), "Onboarding failed!!", message);
+                logger.severe("registerInstitute failed due to technical issue to register institute " + institute);
+            }
+        } else {
+            logger.severe("registerInstitute failed to register as institute is already exist" + institute);
+        }
+
+        return  result;
     }
 
     public Boolean registerAdmin(Admin admin){

@@ -12,9 +12,12 @@ public interface InstituteDAO {
 
     boolean deleteInstitute(Institute institute);
 
+    boolean deleteInstitute(int id);
+
     boolean updateInstitute(Institute institute);
 
     boolean createInstitute(Institute institute);
 
+    boolean checkExist(Institute institute);
 
 }

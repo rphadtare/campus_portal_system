@@ -33,21 +33,29 @@ public class RegisterController {
 
     @RequestMapping(value = "/institute_register", method = RequestMethod.POST)
     public String registerInstitute(
-            @RequestParam("instituteId") int instituteId,
-            @RequestParam("salutations") String salutations,
-            @RequestParam("firstName") String firstName,
-            @RequestParam("middleName") String middleName,
-            @RequestParam("lastName") String lastName,
-            @RequestParam("qualifications") String qualifications,
+            @RequestParam("name") String name,
+            @RequestParam("university") String university,
             @RequestParam("emailId") String emailId,
-            @RequestParam("contactNo") String contactNo
+            @RequestParam("address") String address
     ) {
         /*
             This method used to register institute
          */
 
+        //create institute object
+        Institute institute = new Institute(1, name, university, emailId, address);
+        logger.info("Inside institute_register for registration of " + institute);
 
-        return null;
+        String result = "";
+        if(registerService.registerInstitute(institute)){
+            logger.info("Inside institute_register for registration of " + institute + " is successful");
+            result = "institute_success";
+        } else {
+            logger.severe("Inside institute_register for registration of " + institute + " is failed");
+            result = "institute_failed";
+        }
+
+        return result;
     }
 
 
