@@ -4,13 +4,18 @@ import com.example.campus_portal_system.utility.beans.Login;
 import com.example.campus_portal_system.utility.beans.mapper.LoginMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.logging.Logger;
 
+@Component
 public class LoginDAOImpl implements  LoginDAO {
 
     JdbcTemplate jdbcTemplate;
+
+    private Logger logger;
 
     private final String SQL_CREATE_LOGIN = "insert into login(user_type," +
             "user_name, password" +
@@ -32,11 +37,12 @@ public class LoginDAOImpl implements  LoginDAO {
     @Autowired
     public LoginDAOImpl(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
+        logger = Logger.getLogger(LoginDAOImpl.class.getName());
     }
 
     @Override
     public Boolean createLogin(Login login) {
-        System.out.println("[LoginDAOImpl]: Inside createLogin ...");
+        logger.info("Inside createLogin ...");
         return jdbcTemplate.update(
                 SQL_CREATE_LOGIN,
                 login.getUserType(),
@@ -47,7 +53,7 @@ public class LoginDAOImpl implements  LoginDAO {
 
     @Override
     public Boolean deleteLogin(int loginId) {
-        System.out.println("[LoginDAOImpl]: Inside deleteLogin ...");
+        logger.info("Inside deleteLogin ...");
         return jdbcTemplate.update(
                 SQL_DELETE_LOGIN,
                 loginId
@@ -56,19 +62,19 @@ public class LoginDAOImpl implements  LoginDAO {
 
     @Override
     public Login getLogin(int loginId) {
-        System.out.println("[LoginDAOImpl]: Inside getLogin ...");
+        logger.info("Inside getLogin ...");
         return jdbcTemplate.queryForObject(SQL_GET_LOGIN, new Object[] {loginId}, new LoginMapper());
     }
 
     @Override
     public List<Login> getAllLogin() {
-        System.out.println("[LoginDAOImpl]: Inside getAllLogin ...");
+        logger.info("Inside getAllLogin ...");
         return jdbcTemplate.query(SQL_GET_ALL_LOGIN, new LoginMapper());
     }
 
     @Override
     public List<Login> getAllLogin(int userTypeId) {
-        System.out.println("[LoginDAOImpl]: Inside getAllLogin of user type : " + userTypeId);
+        logger.info("Inside getAllLogin of user type : " + userTypeId);
         return jdbcTemplate.query(SQL_GET_ALL_LOGIN_OF_USERS, new Object[] {userTypeId}, new LoginMapper());
     }
 }

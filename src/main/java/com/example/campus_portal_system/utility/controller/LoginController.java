@@ -6,15 +6,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.logging.Logger;
+
 @Controller
 public class LoginController {
 
     private final LoginService service;
     private final CampusStudentController campusStudentController;
 
+    private Logger logger;
+
     public LoginController(LoginService loginService, CampusStudentController campusStudentController) {
         this.service = loginService;
         this.campusStudentController = campusStudentController;
+        this.logger = Logger.getLogger(LoginController.class.getName());
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -28,7 +33,7 @@ public class LoginController {
                                    @RequestParam String password,
                                    @RequestParam int usertype) {
         boolean isValidUser = service.validateUser(name, password, usertype);
-        System.out.println("Validated user: " + isValidUser);
+        logger.info("Validated user: " + isValidUser);
         String result = "login";
 
         // if user is valid
@@ -51,7 +56,7 @@ public class LoginController {
             model.addAttribute("errorMessage", "Invalid Credentials!!");
         }
 
-        System.out.println("login result: " + result);
+        logger.info("login result: " + result);
         return result;
 
     }

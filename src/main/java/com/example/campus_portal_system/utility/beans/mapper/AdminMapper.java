@@ -25,7 +25,7 @@ public class AdminMapper implements RowMapper<Admin>  {
                     rs.getInt("is_deleted")
             );
         } else {
-            return null;
+            return new Admin(-1);
         }
 
     }

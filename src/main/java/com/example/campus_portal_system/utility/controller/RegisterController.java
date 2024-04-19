@@ -12,14 +12,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @Controller
 public class RegisterController {
 
     private final RegisterService registerService;
 
+    private Logger logger;
+
     public RegisterController(RegisterService registerService) {
         this.registerService = registerService;
+        logger = Logger.getLogger(RegisterController.class.getName());
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
@@ -43,7 +47,7 @@ public class RegisterController {
             This method used to store head of department registration request data for further processing
          */
 
-        System.out.println("[RegisterController]: Inside /department_register post ...");
+        logger.info("Inside /department_register post ...");
 
 
         //Here we will get data from department_register.jsp page
@@ -77,7 +81,7 @@ public class RegisterController {
                 firstName,middleName,lastName,qualifications,emailId,contactNo,isDeleted);
 
         boolean flag = registerService.registerTeacher(teacher);
-        System.out.println("[RegisterController]: status of  department_register " + flag);
+        logger.info("status of  department_register " + flag);
 
         if(flag){
             return "next_step_post_successful_registartion";

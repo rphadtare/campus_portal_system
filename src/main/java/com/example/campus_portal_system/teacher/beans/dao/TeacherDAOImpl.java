@@ -4,13 +4,18 @@ import com.example.campus_portal_system.teacher.beans.Teacher;
 import com.example.campus_portal_system.teacher.beans.mapper.TeacherMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.logging.Logger;
 
+@Component
 public class TeacherDAOImpl implements TeacherDAO {
 
     JdbcTemplate jdbcTemplate;
+
+    private Logger logger;
 
     private final String SQL_GET_ALL_TEACHERS = "select * from teacher";
 
@@ -43,42 +48,43 @@ public class TeacherDAOImpl implements TeacherDAO {
     @Autowired
     public TeacherDAOImpl(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
+        logger = Logger.getLogger(TeacherDAOImpl.class.getName());
     }
 
     @Override
     public List<Teacher> getAllTeachers() {
-        System.out.println("[TeacherDAOImpl]: Inside getAllTeachers ...");
+        logger.info("Inside getAllTeachers ...");
         return jdbcTemplate.query(SQL_GET_ALL_TEACHERS, new TeacherMapper());
     }
 
     @Override
     public List<Teacher> getAllTeachers(int institute_id) {
-        System.out.println("[TeacherDAOImpl]: Inside getAllTeachers of institute : " + institute_id);
+        logger.info("Inside getAllTeachers of institute : " + institute_id);
         return jdbcTemplate.query(SQL_GET_ALL_TEACHERS_OF_INSTITUTE, new Object[] {institute_id}, new TeacherMapper());
     }
 
     @Override
     public List<Teacher> getAllHOD(int institute_id) {
-        System.out.println("[TeacherDAOImpl]: Inside getAllHOD of institute : " + institute_id);
+        logger.info("Inside getAllHOD of institute : " + institute_id);
         return jdbcTemplate.query(SQL_GET_TEACHER_BY_TYPE_FROM_INSTITUTE, new Object[] {institute_id, "2,4"}, new TeacherMapper());
     }
 
     @Override
     public List<Teacher> getAllClassTeachers(int institute_id) {
-        System.out.println("[TeacherDAOImpl]: Inside getAllClassTeachers of institute : " + institute_id);
+        logger.info("Inside getAllClassTeachers of institute : " + institute_id);
         return jdbcTemplate.query(SQL_GET_TEACHER_BY_TYPE_FROM_INSTITUTE, new Object[] {institute_id, "3,4"}, new TeacherMapper());
     }
 
     @Override
     public Teacher getTeacherById(int institute_id, int teacher_id) {
-        System.out.println("[TeacherDAOImpl]: Inside getTeacherById ..");
+        logger.info("Inside getTeacherById ..");
         return jdbcTemplate.queryForObject(SQL_GET_TEACHER_BY_ID, new Object[] {institute_id, teacher_id},
                 new TeacherMapper());
     }
 
     @Override
     public Boolean updateTeacherInfo(Teacher teacher) {
-        System.out.println("[TeacherDAOImpl]: Inside updateTeacherInfo ...");
+        logger.info("Inside updateTeacherInfo ...");
         return jdbcTemplate.update(
                 SQL_UPDATE_TEACHER_BASIC_INFO,
                 teacher.getSalutations(),
@@ -95,7 +101,7 @@ public class TeacherDAOImpl implements TeacherDAO {
 
     @Override
     public Boolean deleteTeacher(Teacher teacher) {
-        System.out.println("[TeacherDAOImpl]: Inside deleteTeacher ...");
+        logger.info("Inside deleteTeacher ...");
         return jdbcTemplate.update(
                 SQL_DELETE_TEACHER_BY_ID,
                 teacher.getInstituteId(),
@@ -105,7 +111,7 @@ public class TeacherDAOImpl implements TeacherDAO {
 
     @Override
     public Boolean deleteTeacherById(int institute_id, int teacher_id) {
-        System.out.println("[TeacherDAOImpl]: Inside deleteTeacherById ...");
+        logger.info("Inside deleteTeacherById ...");
         return jdbcTemplate.update(
                 SQL_DELETE_TEACHER_BY_ID,
                 institute_id,
@@ -115,7 +121,7 @@ public class TeacherDAOImpl implements TeacherDAO {
 
     @Override
     public Boolean createTeacher(Teacher teacher) {
-        System.out.println("[TeacherDAOImpl]: Inside createTeacher ...");
+        logger.info("Inside createTeacher ...");
         return jdbcTemplate.update(
                 SQL_INSERT_TEACHER_INFO,
                 teacher.getInstituteId(),
@@ -138,7 +144,7 @@ public class TeacherDAOImpl implements TeacherDAO {
 
     @Override
     public Boolean activateTeacher(int institute_id, int teacher_id) {
-        System.out.println("[TeacherDAOImpl]: Inside activateTeacher ...");
+        logger.info("Inside activateTeacher ...");
         return jdbcTemplate.update(SQL_ACTIVATE_TEACHER, institute_id, teacher_id) > 0;
     }
 }

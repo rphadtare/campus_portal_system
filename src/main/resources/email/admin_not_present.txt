@@ -1,0 +1,9 @@
+Dear user,
+Thank you for trying to register with campus portal system.
+However, unfortunately admin account is not set up for institute - institute_name.
+We kindly request you to please check with them further on this and try again for registration.
+
+Have a good day ahead!
+
+Best regards,
+Campus Portal System

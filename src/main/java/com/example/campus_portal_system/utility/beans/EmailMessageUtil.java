@@ -16,6 +16,10 @@ public class EmailMessageUtil {
                 fileName = "registration_successful_message.txt";
                 break;
 
+            case "registration_failed":
+                fileName = "registration_unsuccessful_message.txt";
+                break;
+
             case "admin_not_present":
                 fileName = "admin_not_present.txt";
                 break;
@@ -29,7 +33,7 @@ public class EmailMessageUtil {
             Scanner sc = new Scanner(file);
 
             while (sc.hasNextLine()){
-                sb.append(sc.nextLine());
+                sb.append(sc.nextLine() + "\n");
             }
 
         } catch (IOException e) {

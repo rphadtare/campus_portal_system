@@ -4,17 +4,23 @@ import com.example.campus_portal_system.utility.beans.RegisterRequest;
 import com.example.campus_portal_system.utility.beans.mapper.RegisterRequestMaper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.logging.Logger;
 
+@Component
 public class RegisterRequestDAOImpl implements  RegisterRequestDAO {
 
     JdbcTemplate jdbcTemplate;
 
+    private Logger logger;
+
     @Autowired
     public RegisterRequestDAOImpl(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
+        logger = Logger.getLogger(RegisterRequestDAOImpl.class.getName());
     }
 
     public final String SQL_GET_REQUESTS_BY_APPROVALS_ID_AND_TYPE = "select * from register_request " +
@@ -31,7 +37,7 @@ public class RegisterRequestDAOImpl implements  RegisterRequestDAO {
 
     @Override
     public List<RegisterRequest> getRequests(int userTypeIdForApproval, int userIdForApproval) {
-        System.out.println("[RegisterRequestDAOImpl]: Inside getRequests ...");
+        logger.info("Inside getRequests ...");
         return jdbcTemplate.query(SQL_GET_REQUESTS_BY_APPROVALS_ID_AND_TYPE,
                 new Object[]{userTypeIdForApproval, userIdForApproval},
                 new RegisterRequestMaper());
@@ -39,7 +45,7 @@ public class RegisterRequestDAOImpl implements  RegisterRequestDAO {
 
     @Override
     public Boolean updateStatusOfRequest(RegisterRequest registerRequest) {
-        System.out.println("[RegisterRequestDAOImpl]: Inside updateStatusOfRequest ...");
+        logger.info("Inside updateStatusOfRequest ...");
         return jdbcTemplate.update(
                 SQL_UPDATE_STATUS_OF_REQUEST,
                 registerRequest.getStatus(),
@@ -49,7 +55,7 @@ public class RegisterRequestDAOImpl implements  RegisterRequestDAO {
 
     @Override
     public Boolean createRequest(RegisterRequest registerRequest) {
-        System.out.println("[RegisterRequestDAOImpl]: Inside updateStatusOfRequest ...");
+        logger.info("Inside updateStatusOfRequest ...");
         return jdbcTemplate.update(
                 SQL_CREATE_REQUEST,
                 registerRequest.getrequestType(),

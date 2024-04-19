@@ -3,24 +3,32 @@ package com.example.campus_portal_system.dept.beans.dao;
 import com.example.campus_portal_system.dept.beans.ClassDetails;
 import com.example.campus_portal_system.dept.beans.mapper.ClassDetailsMapper;
 import com.example.campus_portal_system.dept.beans.mapper.DepartmentMapper;
+import com.mysql.cj.log.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.support.SqlLobValue;
 import org.springframework.jdbc.support.lob.DefaultLobHandler;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.io.ByteArrayInputStream;
 import java.sql.Types;
 import java.util.List;
+import java.util.logging.Logger;
 
+@Component
 public class ClassDetailsDAOImpl implements ClassDetailsDAO {
 
     JdbcTemplate jdbcTemplate;
 
+    private Logger logger;
+
     @Autowired
     public ClassDetailsDAOImpl(DataSource dataSource) {
+
         jdbcTemplate = new JdbcTemplate(dataSource);
+        logger = Logger.getLogger(ClassDetailsDAOImpl.class.getName());
     }
 
     private final String SQL_GET_ALL_CLASSES_BY_INSTITUTE_AND_DEPT_ID = "select * from class_details_mapping" +
@@ -36,7 +44,7 @@ public class ClassDetailsDAOImpl implements ClassDetailsDAO {
 
     @Override
     public List<ClassDetails> getClassDetailsByInstituteAndDepartmentId(int instituteId, int departmentId) {
-        System.out.println("[ClassDetailsDAOImpl]: Inside getClassDetailsByInstituteAndDepartmentId");
+        logger.info("Inside getClassDetailsByInstituteAndDepartmentId");
         return jdbcTemplate.query(SQL_GET_ALL_CLASSES_BY_INSTITUTE_AND_DEPT_ID,
                 new Object[] {instituteId, departmentId},
                 new ClassDetailsMapper());
@@ -44,7 +52,7 @@ public class ClassDetailsDAOImpl implements ClassDetailsDAO {
 
     @Override
     public Boolean setTimetable(int id, int instituteId, int departmentId, byte[] newTimeTable) {
-        System.out.println("[ClassDetailsDAOImpl]: Inside setTimetable");
+        logger.info("Inside setTimetable");
         MapSqlParameterSource in = new MapSqlParameterSource();
         in.addValue("timetable",  new SqlLobValue(new ByteArrayInputStream(newTimeTable),
                 newTimeTable.length, new DefaultLobHandler()), Types.BLOB);
@@ -58,7 +66,7 @@ public class ClassDetailsDAOImpl implements ClassDetailsDAO {
 
     @Override
     public Boolean setClassTeacher(int instituteId, int departmentId, int classTeacherId) {
-        System.out.println("[ClassDetailsDAOImpl]: Inside setClassTeacher");
+        logger.info("Inside setClassTeacher");
         return jdbcTemplate.update(SQL_UPDATE_CLASS_TEACHER,
                 new Object[]{classTeacherId, instituteId, departmentId}) > 0;
 

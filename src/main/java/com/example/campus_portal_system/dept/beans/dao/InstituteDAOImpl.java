@@ -8,15 +8,20 @@ import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Component
 public class InstituteDAOImpl implements InstituteDAO {
 
     JdbcTemplate jdbcTemplate;
 
+    private Logger logger;
+
     @Autowired
     public InstituteDAOImpl(DataSource dataSource) {
+
         jdbcTemplate = new JdbcTemplate(dataSource);
+        logger = Logger.getLogger(InstituteDAOImpl.class.getName());
     }
 
     private final String SQL_FIND_INSTITUTE_BY_ID = "select * from institute where institute_id = ?";

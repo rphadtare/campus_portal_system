@@ -30,6 +30,10 @@ public class Admin {
         this.isDeleted = isDeleted;
     }
 
+    public Admin(int adminId) {
+        this.adminId = adminId;
+    }
+
     public int getAdminId() {
         return adminId;
     }

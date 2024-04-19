@@ -1,11 +1,21 @@
 package com.example.campus_portal_system.utility.service;
 
 import org.springframework.stereotype.Service;
+
+import java.util.logging.Logger;
+
 @Service
 public class LoginService {
+
+    private Logger logger;
+
+    LoginService(){
+        this.logger = Logger.getLogger(LoginService.class.getName());
+    }
+
     public boolean validateUser(String userid, String password, int usertype) {
 
-        System.out.println("[LoginService]: Inside validateUser ...");
+        logger.info("Inside validateUser ...");
         boolean result = true;
 
 

@@ -1,0 +1,9 @@
+Dear user,
+Thank you for registration with campus portal system.
+Your request has been sent for approval.
+We will keep you posted further updates.
+
+Have a good day ahead!
+
+Best regards,
+Campus Portal System

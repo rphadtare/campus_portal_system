@@ -6,17 +6,24 @@ import com.example.campus_portal_system.dept.beans.mapper.NotificationAttachment
 import com.example.campus_portal_system.dept.beans.mapper.NotificationsMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.logging.Logger;
 
+@Component
 public class NotificationsDAOImpl implements NotificationsDAO {
 
     JdbcTemplate jdbcTemplate;
 
+    private Logger logger;
+    
     @Autowired
     public NotificationsDAOImpl(DataSource dataSource) {
+        
         jdbcTemplate = new JdbcTemplate(dataSource);
+        logger = Logger.getLogger(NotificationsDAOImpl.class.getName());
     }
 
     public final String SQL_GET_ALL_NOTIFICATIONS_OF_USER = "select * from notifications" +
@@ -27,13 +34,13 @@ public class NotificationsDAOImpl implements NotificationsDAO {
 
     @Override
     public List<Notifications> getAllNotificationsByUser(String userName) {
-        System.out.println("[NotificationsDAOImpl]: Inside getAllNotificationsByUser");
+        logger.info("Inside getAllNotificationsByUser");
         return jdbcTemplate.query(SQL_GET_ALL_NOTIFICATIONS_OF_USER, new Object[]{userName}, new NotificationsMapper());
     }
 
     @Override
     public List<NotificationAttachments> getNotificationsAttachments(int id) {
-        System.out.println("[NotificationsDAOImpl]: Inside getNotificationsAttachments");
+        logger.info("Inside getNotificationsAttachments");
         return jdbcTemplate.query(SQL_GET_ALL_ATTACHMENTS_OF_NOTIFICATIONS, new Object[]{id}, new NotificationAttachmentsMapper());
     }
 }

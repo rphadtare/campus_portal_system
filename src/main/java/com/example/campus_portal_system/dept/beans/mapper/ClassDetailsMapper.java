@@ -9,13 +9,18 @@ import java.sql.SQLException;
 public class ClassDetailsMapper implements RowMapper<ClassDetails> {
     @Override
     public ClassDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return new ClassDetails(
-                rs.getInt("id"),
-                rs.getString("class_name"),
-                rs.getInt("institute_id"),
-                rs.getInt("department_id"),
-                rs.getInt("class_teacher_id"),
-                rs.getBytes("timetable")
-        );
+        if(rs.isBeforeFirst()){
+            return new ClassDetails(
+                    rs.getInt("id"),
+                    rs.getString("class_name"),
+                    rs.getInt("institute_id"),
+                    rs.getInt("department_id"),
+                    rs.getInt("class_teacher_id"),
+                    rs.getBytes("timetable")
+            );
+        } else {
+            return null;
+        }
+
     }
 }

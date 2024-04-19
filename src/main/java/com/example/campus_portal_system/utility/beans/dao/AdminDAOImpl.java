@@ -2,14 +2,20 @@ package com.example.campus_portal_system.utility.beans.dao;
 
 import com.example.campus_portal_system.utility.beans.Admin;
 import com.example.campus_portal_system.utility.beans.mapper.AdminMapper;
+import com.example.campus_portal_system.utility.service.RegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.util.logging.Logger;
 
+@Component
 public class AdminDAOImpl implements AdminDAO {
 
     JdbcTemplate jdbcTemplate;
+
+    private Logger logger = Logger.getLogger(AdminDAOImpl.class.getName());
 
     private final String SQL_CREATE_ADMIN = "insert into admin(institute_id, admin_type_id," +
             "salutations, first_name, middle_name, last_name," +
@@ -32,7 +38,7 @@ public class AdminDAOImpl implements AdminDAO {
 
     @Override
     public Boolean createAdmin(Admin admin) {
-        System.out.println("[AdminDAOImpl]: Inside createAdmin ...");
+        logger.info("Inside createAdmin ...");
         return jdbcTemplate.update(SQL_CREATE_ADMIN,
                 admin.getInstituteId(),
                 admin.getAdminTypeId(),
@@ -47,7 +53,7 @@ public class AdminDAOImpl implements AdminDAO {
 
     @Override
     public Boolean updateAdminInfo(Admin admin) {
-        System.out.println("[AdminDAOImpl]: Inside updateAdminInfo ...");
+        logger.info("Inside updateAdminInfo ...");
         return jdbcTemplate.update(
                 SQL_UPDATE_ADMIN,
                 admin.getSalutations(),
@@ -64,7 +70,12 @@ public class AdminDAOImpl implements AdminDAO {
 
     @Override
     public Admin getAdminInfo(int instituteId) {
-        System.out.println("[AdminDAOImpl]: Inside getAdminInfo ...");
-        return jdbcTemplate.queryForObject(SQL_GET_ADMIN_INFO, new Object[]{instituteId}, new AdminMapper());
+        logger.info("Inside getAdminInfo ...");
+        try{
+            return jdbcTemplate.queryForObject(SQL_GET_ADMIN_INFO, new Object[]{instituteId}, new AdminMapper());
+        } catch (Exception e) {
+            logger.severe("Inside getAdminInfo exception occured - " + e.getMessage());
+        }
+        return new Admin(-1);
     }
 }
