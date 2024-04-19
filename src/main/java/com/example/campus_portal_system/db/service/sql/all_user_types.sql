@@ -5,18 +5,18 @@ CREATE TABLE `all_user_types`
         PRIMARY KEY (`id`) 
 );
 
-insert into all_user_types
-select 1 as id, 'Admin' as user_type
-UNION
-select 2 as id, 'Head Of Department' as user_type
-UNION
-select 3 as id, 'Class Teacher' as user_type
-UNION
-select 4 as id, 'Head Of Department and Class Teacher' as user_type
-UNION
-select 5 as id, 'Teacher' as user_type
-UNION 
-select 6 as id, 'Student' as user_type;
+delete from all_user_types;
+
+insert into all_user_types(id, user_type)
+select 1, 'Admin' union
+select 2, 'Institute' union
+select 3, 'Institute Admin' union
+select 4, 'Head Of Department' union
+select 5, 'Class Teacher' union
+select 6, 'Head Of Department and Class Teacher' union
+select 7, 'Teacher' union
+select 8, 'Student';
+
 
 --data from all_user_types
 select * from all_user_types;

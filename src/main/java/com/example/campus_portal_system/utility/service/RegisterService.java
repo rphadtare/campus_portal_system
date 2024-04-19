@@ -5,10 +5,7 @@ import com.example.campus_portal_system.dept.beans.Institute;
 import com.example.campus_portal_system.dept.beans.dao.InstituteDAO;
 import com.example.campus_portal_system.teacher.beans.Teacher;
 import com.example.campus_portal_system.teacher.beans.dao.TeacherDAO;
-import com.example.campus_portal_system.utility.beans.Admin;
-import com.example.campus_portal_system.utility.beans.EmailMessageUtil;
-import com.example.campus_portal_system.utility.beans.Helper;
-import com.example.campus_portal_system.utility.beans.RegisterRequest;
+import com.example.campus_portal_system.utility.beans.*;
 import com.example.campus_portal_system.utility.beans.dao.AdminDAO;
 import com.example.campus_portal_system.utility.beans.dao.RegisterRequestDAO;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -117,7 +114,7 @@ public class RegisterService {
             RegisterRequest registerRequest =
                     new RegisterRequest(1,"Admin Register",
                             admin.toString() + "_passcode:" + passCode,
-                            admin.getAdminTypeId(),institute.getInstitute_id(),
+                            UserTypes.INSTITUTE.getNumVal(),institute.getInstitute_id(),
                             "OPEN");
 
             Boolean adminCreateResult = adminDAO.createAdmin(admin);

@@ -7,10 +7,12 @@ import java.util.logging.Logger;
 @Service
 public class LoginService {
 
+    private EmailService emailService;
     private Logger logger;
 
     LoginService(){
         this.logger = Logger.getLogger(LoginService.class.getName());
+        this.emailService =  new EmailService();
     }
 
     public boolean validateUser(String userid, String password, int usertype) {
@@ -34,11 +36,27 @@ public class LoginService {
 
     }
 
+    public boolean adminRegisterRequestAuthorization(int adminId, int instituteId, String approval, String passCode){
+        logger.info("inside adminRegisterRequestAuthorization to " + approval + " request for admin id - " + adminId);
+
+        //get register request details of admin id
+
+
+
+
+
+
+        return false;
+    }
+
+
     public boolean provideLoginToUser(){
 
 
         return true;
     }
+
+
 
 
 }

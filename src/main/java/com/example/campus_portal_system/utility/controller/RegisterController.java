@@ -4,6 +4,7 @@ package com.example.campus_portal_system.utility.controller;
 import com.example.campus_portal_system.dept.beans.Institute;
 import com.example.campus_portal_system.teacher.beans.Teacher;
 import com.example.campus_portal_system.utility.beans.Admin;
+import com.example.campus_portal_system.utility.beans.UserTypes;
 import com.example.campus_portal_system.utility.service.RegisterService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -99,7 +100,6 @@ public class RegisterController {
     public String saveHeadOfDepartmentInformation(
             @RequestParam("instituteId") int instituteId,
             @RequestParam("departmentId") int departmentId,
-            @RequestParam("teacherTypeId") int teacherTypeId,
             @RequestParam("salutations") String salutations,
             @RequestParam("firstName") String firstName,
             @RequestParam("middleName") String middleName,
@@ -133,7 +133,9 @@ public class RegisterController {
         // until admin approves it
         int isDeleted = 1;
 
-        Teacher teacher = new Teacher(0,instituteId,departmentId,teacherTypeId,salutations,
+        Teacher teacher = new Teacher(0,instituteId,departmentId,
+                UserTypes.HEAD_OF_DEPARTMENT_AND_CLASS_TEACHER.getNumVal(),
+                salutations,
                 firstName,middleName,lastName,qualifications,emailId,contactNo,isDeleted);
 
         boolean flag = registerService.registerTeacher(teacher);

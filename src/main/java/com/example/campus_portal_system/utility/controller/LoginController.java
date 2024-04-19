@@ -61,4 +61,17 @@ public class LoginController {
 
     }
 
+    @RequestMapping(value = "/approve_admin_registration", method = RequestMethod.POST)
+    public String approveAdminRegistration(
+            @RequestParam("adminId") int adminId,
+            @RequestParam("instituteId") int instituteId,
+            @RequestParam("passCode") String passCode,
+            @RequestParam("approval") String approval
+    ) {
+
+
+        return null;
+    }
+
+
 }
