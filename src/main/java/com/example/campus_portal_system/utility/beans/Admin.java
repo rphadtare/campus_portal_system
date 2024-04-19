@@ -139,4 +139,8 @@ public class Admin {
                 ", isDeleted=" + isDeleted +
                 '}';
     }
+
+    public String getFullName(){
+        return this.salutations + " " + this.getFirstName() + " " + this.getMiddleName() + " " + this.getLastName();
+    }
 }

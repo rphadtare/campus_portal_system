@@ -1,0 +1,16 @@
+Respected collegeName,
+Admin handler request for your college has been raised.
+This mail provides you details of that request as follows -
+Name: Requester_user_name
+Email ID of requester: email_id
+Contact number of requester: contact_no
+Admin ID: admin_id
+
+If you want to authenticate this requester, please reach out to our technical team and use below passcode -
+pass_code
+
+In case you think this is inappropriate request, you can disapprove/deny with the help of technical team.
+Have a good day ahead!
+
+Best regards,
+Campus Portal System

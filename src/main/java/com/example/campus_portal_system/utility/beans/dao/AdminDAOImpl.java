@@ -31,6 +31,9 @@ public class AdminDAOImpl implements AdminDAO {
 
     private final String SQL_GET_ADMIN_INFO = "select * from admin where institute_id = ?";
 
+    private final String SQL_GET_ADMIN_INFO_BY_INSTITUTE_AND_EMAIL_ID = "select * from admin where institute_id = ?" +
+            "and email_id = ?";
+
     @Autowired
     public AdminDAOImpl(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
@@ -38,43 +41,85 @@ public class AdminDAOImpl implements AdminDAO {
 
     @Override
     public Boolean createAdmin(Admin admin) {
-        logger.info("Inside createAdmin ...");
-        return jdbcTemplate.update(SQL_CREATE_ADMIN,
-                admin.getInstituteId(),
-                admin.getAdminTypeId(),
-                admin.getSalutations(),
-                admin.getFirstName(),
-                admin.getMiddleName(),
-                admin.getLastName(),
-                admin.getEmailId(),
-                admin.getContactNo()
-                ) > 0;
+        logger.info("Inside createAdmin " + admin);
+        int result = 0;
+        try {
+
+            result = jdbcTemplate.update(SQL_CREATE_ADMIN,
+                    admin.getInstituteId(),
+                    admin.getAdminTypeId(),
+                    admin.getSalutations(),
+                    admin.getFirstName(),
+                    admin.getMiddleName(),
+                    admin.getLastName(),
+                    admin.getEmailId(),
+                    admin.getContactNo()
+            );
+
+        } catch(Exception e) {
+            logger.severe("Exception occurred while creating " + admin + " Exception details are -" + e.getMessage());
+            result = 0;
+        }
+
+        if(result > 0) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     @Override
     public Boolean updateAdminInfo(Admin admin) {
-        logger.info("Inside updateAdminInfo ...");
-        return jdbcTemplate.update(
-                SQL_UPDATE_ADMIN,
-                admin.getSalutations(),
-                admin.getFirstName(),
-                admin.getMiddleName(),
-                admin.getLastName(),
-                admin.getQualifications(),
-                admin.getEmailId(),
-                admin.getContactNo(),
-                admin.getInstituteId(),
-                admin.getAdminId()
-        ) > 0;
+        logger.info("Inside updateAdminInfo for admin " + admin);
+        int result = 0;
+
+        try {
+
+            result = jdbcTemplate.update(
+                    SQL_UPDATE_ADMIN,
+                    admin.getSalutations(),
+                    admin.getFirstName(),
+                    admin.getMiddleName(),
+                    admin.getLastName(),
+                    admin.getQualifications(),
+                    admin.getEmailId(),
+                    admin.getContactNo(),
+                    admin.getInstituteId(),
+                    admin.getAdminId());
+
+        } catch(Exception e) {
+            logger.severe("Exception occurred while updating " + admin + " Exception details are -" + e.getMessage());
+            result = 0;
+        }
+
+        if(result > 0) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     @Override
     public Admin getAdminInfo(int instituteId) {
-        logger.info("Inside getAdminInfo ...");
+        logger.info("Inside getAdminInfo for institute id : " + instituteId);
         try{
             return jdbcTemplate.queryForObject(SQL_GET_ADMIN_INFO, new Object[]{instituteId}, new AdminMapper());
         } catch (Exception e) {
-            logger.severe("Inside getAdminInfo exception occured - " + e.getMessage());
+            logger.severe("Inside getAdminInfo exception occurred - " + e.getMessage());
+        }
+        return new Admin(-1);
+    }
+
+    @Override
+    public Admin getAdminInfo(int instituteId, String emailId) {
+        logger.info("Inside getAdminInfo for email id " + emailId + " and institute id : " + instituteId);
+        try{
+            return jdbcTemplate.queryForObject(SQL_GET_ADMIN_INFO_BY_INSTITUTE_AND_EMAIL_ID, new Object[]{instituteId, emailId}, new AdminMapper());
+        } catch (Exception e) {
+            logger.severe("Inside getAdminInfo for email id " + emailId + " and institute id : " + instituteId +
+                    "exception occurred - " + e.getMessage());
         }
         return new Admin(-1);
     }

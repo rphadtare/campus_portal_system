@@ -4,12 +4,12 @@ package com.example.campus_portal_system.utility.controller;
 import com.example.campus_portal_system.dept.beans.Institute;
 import com.example.campus_portal_system.teacher.beans.Teacher;
 import com.example.campus_portal_system.utility.beans.Admin;
-import com.example.campus_portal_system.utility.beans.RegisterRequest;
 import com.example.campus_portal_system.utility.service.RegisterService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -29,6 +29,33 @@ public class RegisterController {
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String showRegisterPage(){
         return "register";
+    }
+
+
+    @RequestMapping(value = "/admin_register", method = RequestMethod.POST)
+    public String registerAdmin(
+            @RequestParam("instituteId") int instituteId,
+            @RequestParam("salutations") String salutations,
+            @RequestParam("firstName") String firstName,
+            @RequestParam("middleName") String middleName,
+            @RequestParam("lastName") String lastName,
+            @RequestParam("qualifications") String qualifications,
+            @RequestParam("emailId") String emailId,
+            @RequestParam("contactNo") String contactNo
+    ){
+        /*
+            This method used to register admin for given institute id
+         */
+        Admin admin = new Admin(1,instituteId,1,salutations,firstName,middleName,lastName,
+                qualifications,emailId,contactNo,0);
+
+        logger.info("Inside admin_register to register - " + admin);
+        if(registerService.registerAdmin(admin)){
+            return "success_admin";
+        } else {
+            return "failure_admin";
+        }
+
     }
 
     @RequestMapping(value = "/department_register", method = RequestMethod.GET)

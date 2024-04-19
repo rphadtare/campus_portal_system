@@ -36,7 +36,16 @@ public class InstituteDAOImpl implements InstituteDAO {
 
     @Override
     public Institute getInstituteById(int id) {
-        return jdbcTemplate.queryForObject(SQL_FIND_INSTITUTE_BY_ID, new Object[] { id }, new InstituteMapper());
+        logger.info("Inside getInstituteById to fetch information for for institute id " + id);
+        try {
+            return jdbcTemplate.queryForObject(SQL_FIND_INSTITUTE_BY_ID, new Object[] { id }, new InstituteMapper());
+        } catch (Exception e){
+            logger.severe("Exception occurred while fetching institute information for institute id " + id);
+            Institute institute = new Institute();
+            institute.setInstitute_id(-1);
+            return institute;
+        }
+
     }
 
     @Override

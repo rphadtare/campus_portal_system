@@ -10,4 +10,6 @@ public interface AdminDAO {
 
     public Admin getAdminInfo(int instituteId);
 
+    public Admin getAdminInfo(int instituteId, String emailId);
+
 }

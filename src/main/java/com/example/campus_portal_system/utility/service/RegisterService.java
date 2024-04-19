@@ -8,6 +8,7 @@ import com.example.campus_portal_system.teacher.beans.Teacher;
 import com.example.campus_portal_system.teacher.beans.dao.TeacherDAO;
 import com.example.campus_portal_system.utility.beans.Admin;
 import com.example.campus_portal_system.utility.beans.EmailMessageUtil;
+import com.example.campus_portal_system.utility.beans.Helper;
 import com.example.campus_portal_system.utility.beans.RegisterRequest;
 import com.example.campus_portal_system.utility.beans.dao.AdminDAO;
 import com.example.campus_portal_system.utility.beans.dao.RegisterRequestDAO;
@@ -65,6 +66,77 @@ public class RegisterService {
         return registerRequestDAO.createRequest(request);
     }
 
+    public Boolean registerAdmin(Admin admin){
+        logger.info(" Inside registerAdmin to register : " + admin);
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DatabaseConfig.class);
+        AdminDAO adminDAO = context.getBean(AdminDAO.class);
+        RegisterRequestDAO registerRequestDAO = context.getBean(RegisterRequestDAO.class);
+        InstituteDAO instituteDAO = context.getBean(InstituteDAO.class);
+
+        //Fetch email id from institute table
+        Institute institute = instituteDAO.getInstituteById(admin.getInstituteId());
+        logger.info("registerAdmin - fetched institute details " + institute);
+
+        if(institute.getInstitute_id() != -1){
+            //random pass code which will be provided to institute to authenticate admin at later stage
+            String passCode = Helper.getPassCode();
+
+            RegisterRequest registerRequest =
+                    new RegisterRequest(1,"Admin Register",
+                            admin.toString() + "_passcode:" + passCode,
+                            admin.getAdminTypeId(),institute.getInstitute_id(),
+                            "OPEN");
+
+            Boolean adminCreateResult = adminDAO.createAdmin(admin);
+            Boolean registerRequestResult = registerRequestDAO.createRequest(registerRequest);
+
+
+            //send email of registration to user and institute
+            if(adminCreateResult && registerRequestResult){
+
+                //to get admin id from system
+                Admin updatedAdmin = adminDAO.getAdminInfo(institute.getInstitute_id(), admin.getEmailId());
+
+                //send mail to user and cc corresponding approval
+                String message = EmailMessageUtil.fetchMessageTemplate("registration")
+                        .replaceAll("user",admin.getFirstName() + " " + admin.getLastName());
+
+                logger.info(" message for user: " + message);
+
+                emailService.SendEmail(admin.getEmailId(),
+                        institute.getEmail_id(), "Thanks for registration !!", message);
+
+                //sending one more email to institute with passcode to authenticate admin request at later stage
+                message = EmailMessageUtil.fetchMessageTemplate("admin_passcode")
+                        .replaceAll("collegeName",institute.getName())
+                        .replaceAll("Requester_user_name", admin.getFullName())
+                        .replaceAll("email_id", admin.getEmailId())
+                        .replaceAll("contact_no",admin.getContactNo())
+                        .replaceAll("pass_code",passCode)
+                        .replaceAll("admin_id", String.valueOf(updatedAdmin.getAdminId()));
+
+                logger.info(" message for user: " + message);
+
+                emailService.SendEmail(institute.getEmail_id(), "Notification for admin handle request !!", message);
+
+                return true;
+            }
+            //send email of unsuccessful registration to user and institute
+            else {
+                String message = EmailMessageUtil.fetchMessageTemplate("registration_failed")
+                        .replaceAll("user",admin.getFirstName() + " " + admin.getLastName());
+
+                logger.info(" message for user: " + message);
+                emailService.SendEmail(admin.getEmailId(),
+                        institute.getEmail_id(), "Admin registration failed !!", message);
+
+                return false;
+            }
+        } else {
+            logger.severe("registerAdmin - no institute present for id: " + admin.getInstituteId());
+            return false;
+        }
+    }
 
     public Boolean registerTeacher(Teacher teacher){
         /*

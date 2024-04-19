@@ -24,6 +24,11 @@ public class EmailMessageUtil {
                 fileName = "admin_not_present.txt";
                 break;
 
+            case "admin_passcode":
+                fileName = "admin_passcode_message.txt";
+                break;
+
+
         }
 
 

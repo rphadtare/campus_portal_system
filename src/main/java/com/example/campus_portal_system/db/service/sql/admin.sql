@@ -10,7 +10,7 @@ CREATE TABLE `ADMIN` (
 `email_id` varchar(100) NOT NULL DEFAULT '',   
 `contact_no` varchar(12) NOT NULL DEFAULT '',
 `is_deleted` int not null DEFAULT 0 check (is_deleted in (0, 1)),   
-PRIMARY KEY (`admin_id`, `admin_type_id`, `institute_id`),
+PRIMARY KEY (`admin_id`, `admin_type_id`, `institute_id`, `email_id`),
 FOREIGN KEY (`institute_id`) REFERENCES institute(institute_id),
 FOREIGN KEY (`admin_type_id`) REFERENCES all_user_types(id)
 ); 
