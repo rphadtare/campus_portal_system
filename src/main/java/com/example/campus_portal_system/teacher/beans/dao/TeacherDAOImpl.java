@@ -2,6 +2,9 @@ package com.example.campus_portal_system.teacher.beans.dao;
 
 import com.example.campus_portal_system.teacher.beans.Teacher;
 import com.example.campus_portal_system.teacher.beans.mapper.TeacherMapper;
+import com.example.campus_portal_system.utility.beans.Admin;
+import com.example.campus_portal_system.utility.beans.UserTypes;
+import com.example.campus_portal_system.utility.beans.mapper.AdminMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -44,6 +47,10 @@ public class TeacherDAOImpl implements TeacherDAO {
             "values(?,?,?,?,?,?,?,?,?,?,1)";
 
     public final String SQL_ACTIVATE_TEACHER = "update teacher set is_deleted = 0 where institute_id = ? and teacher_id = ?";
+
+    public final String SQL_CHECK_IF_HOD_EXIST = "select * from teacher where institute_id = ? and teacher_id = ?" +
+            "and teacherTypeId in (" + UserTypes.HEAD_OF_DEPARTMENT.getNumVal() + "," +
+            UserTypes.HEAD_OF_DEPARTMENT_AND_CLASS_TEACHER.getNumVal() + ") limit 1";
 
     @Autowired
     public TeacherDAOImpl(DataSource dataSource) {
@@ -146,5 +153,26 @@ public class TeacherDAOImpl implements TeacherDAO {
     public Boolean activateTeacher(int institute_id, int teacher_id) {
         logger.info("Inside activateTeacher ...");
         return jdbcTemplate.update(SQL_ACTIVATE_TEACHER, institute_id, teacher_id) > 0;
+    }
+
+    @Override
+    public Boolean checkIfHODExist(int institute_id, int department_id) {
+        logger.info("Inside checkIfHODExist for institute id : " + institute_id + " and department id " + department_id);
+        Teacher teacher = new Teacher(-1);
+
+        try{
+            teacher = jdbcTemplate.queryForObject(SQL_CHECK_IF_HOD_EXIST,
+                    new Object[]{institute_id, department_id}, new TeacherMapper());
+
+        } catch (Exception e) {
+            logger.severe("Inside checkIfHODExist for institute id : " + institute_id + " and department id " + department_id +
+                    "exception occurred - " + e.getMessage());
+        }
+
+        if(teacher.getTeacherId() == -1){
+            return false;
+        } else {
+            return true;
+        }
     }
 }

@@ -41,6 +41,9 @@ public class EmailMessageUtil {
                 fileName = "admin_passcode_message.txt";
                 break;
 
+            case "hod_already_exist":
+                fileName = "HOD_already_exist.txt";
+                break;
 
         }
 

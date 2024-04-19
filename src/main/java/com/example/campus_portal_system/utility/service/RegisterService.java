@@ -1,7 +1,9 @@
 package com.example.campus_portal_system.utility.service;
 
 import com.example.campus_portal_system.db.beans.DatabaseConfig;
+import com.example.campus_portal_system.dept.beans.Department;
 import com.example.campus_portal_system.dept.beans.Institute;
+import com.example.campus_portal_system.dept.beans.dao.DepartmentDAO;
 import com.example.campus_portal_system.dept.beans.dao.InstituteDAO;
 import com.example.campus_portal_system.teacher.beans.Teacher;
 import com.example.campus_portal_system.teacher.beans.dao.TeacherDAO;
@@ -189,78 +191,130 @@ public class RegisterService {
     }
 
 
-    public boolean registerHeadOfDepartment(){
-
-
-        return false;
-    }
-
-
-    public Boolean registerTeacher(Teacher teacher){
-        /*
-            To submit new request of teacher or head of department into system
-         */
-
-        logger.info(" Inside registerTeacher ... " + teacher);
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DatabaseConfig.class);
-        TeacherDAO teacherDAO = context.getBean(TeacherDAO.class);
+    private boolean registerHeadOfDepartment(AnnotationConfigApplicationContext context, TeacherDAO teacherDAO, Teacher teacher){
 
         //To check admin details for given institute id
         Admin admin = this.getAdminByInstituteId(teacher.getInstituteId());
-        logger.info(" Inside registerTeacher admin details received: " + admin);
+        logger.info(" Inside registerHeadOfDepartment admin details received: " + admin);
+
+
 
         if(admin.getAdminId() == -1) {
-            //no admin is found for given institute.
-            //Hence, request could not be complete further
-            logger.info(" Admin details are not present for institute id " + teacher.getInstituteId());
+            /***************************************************
+             admin is not found for given institute.
+             Hence, request could not be complete further
+             ****************************************************/
+
+            logger.info("registerHeadOfDepartment- Admin details are not present for institute id " + teacher.getInstituteId());
 
             //Fetch email id from institute table
             InstituteDAO instituteDAO = context.getBean(InstituteDAO.class);
             Institute institute = instituteDAO.getInstituteById(teacher.getInstituteId());
 
             //Sending email to institute regarding this error
-            String message = EmailMessageUtil.fetchMessageTemplate("admin_not_present")
-                    .replaceAll("user",teacher.getFirstName() + " " + teacher.getLastName())
+            String message = EmailMessageUtil.fetchMessageTemplate("hod_already_exist")
+                    .replaceAll("user",teacher.getFullName())
                     .replaceAll("institute_name",institute.getName());
 
-            logger.info(" message for user: " + message);
+            logger.info("registerHeadOfDepartment- message for user: " + message);
             emailService.SendEmail(teacher.getEmailId(),
                     institute.getEmail_id(), "Unable to register !!", message);
 
             return false;
         }
 
-        logger.info(" Admin details fetch successfully for institute id : " + admin.getInstituteId());
+        logger.info("registerHeadOfDepartment- Admin details fetch successfully for institute id : " + admin.getInstituteId());
 
-        // store register request details in database system
+
+        /*********************
+         check if HOD is present for that institute and department
+         if yes then reject this registration request and send email to user stating HOD exist already
+         ***********************/
+
+        if(teacherDAO.checkIfHODExist(teacher.getInstituteId(), teacher.getDepartmentId())){
+            //get institute details and department details
+            InstituteDAO instituteDAO = context.getBean(InstituteDAO.class);
+            Institute institute = instituteDAO.getInstituteById(teacher.getInstituteId());
+
+            DepartmentDAO departmentDAO = context.getBean(DepartmentDAO.class);
+            Department department = departmentDAO.getDepartmentByID(teacher.getDepartmentId());
+
+            logger.severe("registerHeadOfDepartment - HOD already exist for institute : "
+                    + institute.getName() + " and department - " + department.getDepartmentName());
+
+            //sending mail to user
+            String message = EmailMessageUtil.fetchMessageTemplate("hod_already_exist")
+                    .replaceAll("user",teacher.getFullName())
+                    .replaceAll("department_name", department.getDepartmentName())
+                    .replaceAll("institute_name", institute.getName());
+
+            logger.info("registerHeadOfDepartment- message for user: " + message);
+
+            emailService.SendEmail(admin.getEmailId(),
+                    institute.getEmail_id(), "Admin registration failed !!", message);
+
+            return false;
+        }
+
+
+        /**
+         *  store register request details in database system
+         */
+
         RegisterRequest registerRequest =
                 new RegisterRequest(1,"HOD Register",teacher.toString(), admin.getAdminTypeId(),admin.getAdminId(),"OPEN");
 
         boolean registerTeacherFlag = teacherDAO.createTeacher(teacher);
         boolean registerRequestFlag = this.storeRequestDetails(registerRequest);
 
-        logger.info(" register teacher status : " +
+        logger.info("registerHeadOfDepartment - register teacher status : " +
                 "" + registerTeacherFlag  + "" +
                 "register request status " + registerRequestFlag);
 
         if(registerTeacherFlag && registerRequestFlag) {
             //send mail to user and cc corresponding approval
             String message = EmailMessageUtil.fetchMessageTemplate("registration")
-                    .replaceAll("user",teacher.getFirstName() + " " + teacher.getLastName());
-            logger.info(" message for user: " + message);
+                    .replaceAll("user",teacher.getFullName());
+            logger.info("registerHeadOfDepartment - message for user: " + message);
             emailService.SendEmail(teacher.getEmailId(),
                     admin.getEmailId(), "Thanks for registration !!", message);
 
             return true;
         } else {
             String message = EmailMessageUtil.fetchMessageTemplate("registration_failed")
-                    .replaceAll("user",teacher.getFirstName() + " " + teacher.getLastName());
-            logger.info(" message for user: " + message);
+                    .replaceAll("user",teacher.getFullName());
+            logger.info("registerHeadOfDepartment - message for user: " + message);
             emailService.SendEmail(teacher.getEmailId(),
                     admin.getEmailId(), "Thanks for registration !!", message);
 
             return false;
         }
+
+    }
+
+
+    public Boolean registerTeacher(Teacher teacher){
+        /***
+            To submit new request of teacher or head of department into system
+         ***/
+
+        logger.info(" Inside registerTeacher ... " + teacher);
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DatabaseConfig.class);
+        TeacherDAO teacherDAO = context.getBean(TeacherDAO.class);
+
+        if(teacher.getTeacherTypeId() == UserTypes.HEAD_OF_DEPARTMENT_AND_CLASS_TEACHER.getNumVal()){
+            return this.registerHeadOfDepartment(context, teacherDAO, teacher);
+        } else {
+
+
+
+        }
+
+
+
+
+
+        return false;
     }
 
 

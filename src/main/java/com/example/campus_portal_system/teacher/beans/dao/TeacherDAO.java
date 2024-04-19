@@ -29,4 +29,6 @@ public interface TeacherDAO {
 
     Boolean activateTeacher(int institute_id, int teacher_id);
 
+    Boolean checkIfHODExist(int institute_id, int department_id);
+
 }

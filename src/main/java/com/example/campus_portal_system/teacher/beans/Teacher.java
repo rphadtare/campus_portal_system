@@ -37,6 +37,10 @@ public class Teacher {
         this.isDeleted = isDeleted;
     }
 
+    public Teacher(int teacherId) {
+        this.teacherId = teacherId;
+    }
+
     public int getTeacherId() {
         return teacherId;
     }
@@ -149,6 +153,10 @@ public class Teacher {
                 ", contactNo='" + contactNo + '\'' +
                 ", isDeleted=" + isDeleted +
                 '}';
+    }
+
+    public String getFullName(){
+        return getSalutations() + " " + getFirstName() + " " + getLastName();
     }
 
     public String getTeacherType() {

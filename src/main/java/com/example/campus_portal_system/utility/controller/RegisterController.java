@@ -97,10 +97,11 @@ public class RegisterController {
         return "/dept/department_register";
     }
 
-    @RequestMapping(value = "/department_register", method = RequestMethod.POST)
-    public String saveHeadOfDepartmentInformation(
+    @RequestMapping(value = "/teacher_register", method = RequestMethod.POST)
+    public String saveTeacherInformation(
             @RequestParam("instituteId") int instituteId,
             @RequestParam("departmentId") int departmentId,
+            @RequestParam("teacherTypeID") int teacherTypeID,
             @RequestParam("salutations") String salutations,
             @RequestParam("firstName") String firstName,
             @RequestParam("middleName") String middleName,
@@ -113,8 +114,6 @@ public class RegisterController {
         /*
             This method used to store head of department registration request data for further processing
          */
-
-        logger.info("Inside /department_register post ...");
 
 
         //Here we will get data from department_register.jsp page
@@ -135,15 +134,16 @@ public class RegisterController {
         int isDeleted = 1;
 
         Teacher teacher = new Teacher(0,instituteId,departmentId,
-                UserTypes.HEAD_OF_DEPARTMENT_AND_CLASS_TEACHER.getNumVal(),
+                teacherTypeID,
                 salutations,
                 firstName,middleName,lastName,qualifications,emailId,contactNo,isDeleted);
+        logger.info("Inside teacher_register for registration " + teacher);
 
         boolean flag = registerService.registerTeacher(teacher);
-        logger.info("status of  department_register " + flag);
+        logger.info("status of  teacher_register " + flag);
 
         if(flag){
-            return "next_step_post_successful_registartion";
+            return "next_step_post_successful_registration";
         } else {
             return "error";
         }
