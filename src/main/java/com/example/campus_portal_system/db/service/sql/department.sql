@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS department;
 CREATE TABLE `department` 
-(   `id` int NOT NULL DEFAULT '0',   
+(   `id` int NOT NULL AUTO_INCREMENT,
     `department_name` varchar(36) NOT NULL DEFAULT '',   
         PRIMARY KEY (`id`) 
 );

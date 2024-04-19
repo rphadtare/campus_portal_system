@@ -1,7 +1,6 @@
-DROP TABLE IF EXISTS teacher_type;
 DROP TABLE IF EXISTS all_user_types;
 CREATE TABLE `all_user_types` 
-(   `id` INT NOT NULL DEFAULT '0',   
+(   `id` INT NOT NULL AUTO_INCREMENT,
     `user_type` varchar(36) NOT NULL DEFAULT '',   
         PRIMARY KEY (`id`) 
 );

@@ -1,6 +1,5 @@
 package com.example.campus_portal_system.utility.service;
 
-import com.example.campus_portal_system.CampusPortalSystemApplication;
 import com.example.campus_portal_system.db.beans.DatabaseConfig;
 import com.example.campus_portal_system.dept.beans.Institute;
 import com.example.campus_portal_system.dept.beans.dao.InstituteDAO;
@@ -12,8 +11,6 @@ import com.example.campus_portal_system.utility.beans.Helper;
 import com.example.campus_portal_system.utility.beans.RegisterRequest;
 import com.example.campus_portal_system.utility.beans.dao.AdminDAO;
 import com.example.campus_portal_system.utility.beans.dao.RegisterRequestDAO;
-import org.eclipse.tags.shaded.org.apache.xpath.operations.Bool;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
 
@@ -64,6 +61,11 @@ public class RegisterService {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DatabaseConfig.class);
         RegisterRequestDAO registerRequestDAO = context.getBean(RegisterRequestDAO.class);
         return registerRequestDAO.createRequest(request);
+    }
+
+    public Boolean registerInstitute(Institute institute) {
+
+        return false;
     }
 
     public Boolean registerAdmin(Admin admin){

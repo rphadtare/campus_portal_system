@@ -31,6 +31,25 @@ public class RegisterController {
         return "register";
     }
 
+    @RequestMapping(value = "/institute_register", method = RequestMethod.POST)
+    public String registerInstitute(
+            @RequestParam("instituteId") int instituteId,
+            @RequestParam("salutations") String salutations,
+            @RequestParam("firstName") String firstName,
+            @RequestParam("middleName") String middleName,
+            @RequestParam("lastName") String lastName,
+            @RequestParam("qualifications") String qualifications,
+            @RequestParam("emailId") String emailId,
+            @RequestParam("contactNo") String contactNo
+    ) {
+        /*
+            This method used to register institute
+         */
+
+
+        return null;
+    }
+
 
     @RequestMapping(value = "/admin_register", method = RequestMethod.POST)
     public String registerAdmin(

@@ -1,11 +1,11 @@
 drop table if exists institute;
 CREATE TABLE `institute` (     
-`institute_id` int NOT NULL,   
+`institute_id` int NOT NULL AUTO_INCREMENT,
 `name` varchar(100) NOT NULL DEFAULT '',   
 `university` varchar(100) NOT NULL DEFAULT '',   
 `email_id` varchar(100) NOT NULL DEFAULT '',   
 `address` varchar(200) NOT NULL DEFAULT '',   
-PRIMARY KEY (`institute_id`) ); 
+PRIMARY KEY (`institute_id`) );
 
 -- insert statements
 insert into institute 
