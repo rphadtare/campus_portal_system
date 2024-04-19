@@ -99,7 +99,7 @@ public class RegisterService {
 
                 //send mail to user and cc corresponding approval
                 String message = EmailMessageUtil.fetchMessageTemplate("registration")
-                        .replaceAll("user",admin.getFirstName() + " " + admin.getLastName());
+                        .replaceAll("user",admin.getFullName());
 
                 logger.info(" message for user: " + message);
 

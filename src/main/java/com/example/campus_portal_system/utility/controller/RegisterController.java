@@ -69,7 +69,19 @@ public class RegisterController {
     }
 
     @RequestMapping(value = "/department_register", method = RequestMethod.POST)
-    public String saveHeadOfDepartmentInformation(Model model) {
+    public String saveHeadOfDepartmentInformation(
+            @RequestParam("instituteId") int instituteId,
+            @RequestParam("departmentId") int departmentId,
+            @RequestParam("teacherTypeId") int teacherTypeId,
+            @RequestParam("salutations") String salutations,
+            @RequestParam("firstName") String firstName,
+            @RequestParam("middleName") String middleName,
+            @RequestParam("lastName") String lastName,
+            @RequestParam("qualifications") String qualifications,
+            @RequestParam("emailId") String emailId,
+            @RequestParam("contactNo") String contactNo
+
+    ) {
         /*
             This method used to store head of department registration request data for further processing
          */
@@ -82,23 +94,13 @@ public class RegisterController {
 
         //Assume we will receive required fields for registering HOD
 
-        int instituteId = 1;
-        int departmentId = 1;
 
         // here by default when HOD is registering for particular department, then as per system
         // HOD will be class teacher too.
         // If there is already a HOD for that department then that request will get deny by admin.
-        int teacherTypeId = 4;
-
-        String salutations = "Mr.";
-        String firstName = "Rohit";
-        String middleName = "Prakash";
-        String lastName = "Phadtare";
-        String qualifications = "B.E. Information Technology";
+        //int teacherTypeId = 4;
 
         //email ID need to check if it is valid or not on front end
-        String emailId = "rohitphadtare39@outlook.com";
-        String contactNo = "7709665713";
 
         // here isDeleted is 1 because by default when user will register, that record still is deleted in system
         // until admin approves it

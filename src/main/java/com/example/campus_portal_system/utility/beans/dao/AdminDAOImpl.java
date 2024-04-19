@@ -32,7 +32,7 @@ public class AdminDAOImpl implements AdminDAO {
     private final String SQL_GET_ADMIN_INFO = "select * from admin where institute_id = ?";
 
     private final String SQL_GET_ADMIN_INFO_BY_INSTITUTE_AND_EMAIL_ID = "select * from admin where institute_id = ?" +
-            "and email_id = ?";
+            " and email_id = ?";
 
     @Autowired
     public AdminDAOImpl(DataSource dataSource) {
