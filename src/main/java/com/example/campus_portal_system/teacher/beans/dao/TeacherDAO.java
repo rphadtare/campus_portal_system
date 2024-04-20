@@ -13,6 +13,10 @@ public interface TeacherDAO {
 
     List<Teacher> getAllHOD(int institute_id);
 
+    Boolean checkIfHODExist(int institute_id, int department_id);
+
+    Teacher getHOD(int institute_id, int department_id);
+
     List<Teacher> getAllClassTeachers(int institute_id);
 
     Teacher getTeacherById(int institute_id, int teacher_id);
@@ -29,6 +33,6 @@ public interface TeacherDAO {
 
     Boolean activateTeacher(int institute_id, int teacher_id);
 
-    Boolean checkIfHODExist(int institute_id, int department_id);
+
 
 }

@@ -48,9 +48,13 @@ public class TeacherDAOImpl implements TeacherDAO {
 
     public final String SQL_ACTIVATE_TEACHER = "update teacher set is_deleted = 0 where institute_id = ? and teacher_id = ?";
 
-    public final String SQL_CHECK_IF_HOD_EXIST = "select * from teacher where institute_id = ? and teacher_id = ?" +
+    public final String SQL_CHECK_IF_HOD_EXIST = "select * from teacher where institute_id = ? and department_id = ?" +
             "and teacherTypeId in (" + UserTypes.HEAD_OF_DEPARTMENT.getNumVal() + "," +
             UserTypes.HEAD_OF_DEPARTMENT_AND_CLASS_TEACHER.getNumVal() + ") limit 1";
+
+    public final String SQL_GET_HOD = "select * from teacher where institute_id = ? and department_id = ?" +
+            "and teacherTypeId in (" + UserTypes.HEAD_OF_DEPARTMENT.getNumVal() + "," +
+            UserTypes.HEAD_OF_DEPARTMENT_AND_CLASS_TEACHER.getNumVal() + ")";
 
     @Autowired
     public TeacherDAOImpl(DataSource dataSource) {
@@ -174,5 +178,22 @@ public class TeacherDAOImpl implements TeacherDAO {
         } else {
             return true;
         }
+    }
+
+    @Override
+    public Teacher getHOD(int institute_id, int department_id) {
+        logger.info("Inside getHOD for institute id : " + institute_id + " and department id " + department_id);
+        Teacher teacher = new Teacher(-1);
+
+        try{
+            teacher = jdbcTemplate.queryForObject(SQL_GET_HOD,
+                    new Object[]{institute_id, department_id}, new TeacherMapper());
+
+        } catch (Exception e) {
+            logger.severe("Inside getHOD for institute id : " + institute_id + " and department id " + department_id +
+                    "exception occurred - " + e.getMessage());
+        }
+
+       return teacher;
     }
 }

@@ -45,6 +45,10 @@ public class EmailMessageUtil {
                 fileName = "HOD_already_exist.txt";
                 break;
 
+            case "hod_not_exist":
+                fileName = "HOD_not_exist.txt";
+                break;
+
         }
 
 
