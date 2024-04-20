@@ -66,7 +66,7 @@ public class LoginService {
         List<RegisterRequest> allRegisterRequest = registerRequestDAO.
                 getRequests(UserTypes.INSTITUTE.getNumVal(),
                         instituteId,
-                        RequestTypes.INSTITUTE_ADMIN_REGISTER.getRequestTypeValue(), approvalStatus);
+                        RequestTypes.INSTITUTE_ADMIN_REGISTER.getRequestTypeValue(), "OPEN");
 
         Admin admin = adminDAO.getAdminInfoByAdminId(adminId);
 
@@ -86,6 +86,9 @@ public class LoginService {
 
         List<RegisterRequest> filteredRequestList =  allRegisterRequest.stream().filter(r -> r.getRequestInformation().equalsIgnoreCase(searchInformation))
                 .collect(Collectors.toList());
+
+        logger.info("adminRegisterRequestAuthorization - filteredRequestList " + filteredRequestList);
+
 
         if(filteredRequestList == null || filteredRequestList.size() == 0 || filteredRequestList.size() > 1){
             logger.severe("adminRegisterRequestAuthorization to " + approvalStatus + " request for admin id - "
@@ -212,7 +215,7 @@ public class LoginService {
         List<RegisterRequest> allRegisterRequest = registerRequestDAO.
                 getRequests(UserTypes.INSTITUTE_ADMIN.getNumVal(),
                         adminId,
-                        RequestTypes.HEAD_OF_DEPARTMENT_REGISTER.getRequestTypeValue(), approvalStatus);
+                        RequestTypes.HEAD_OF_DEPARTMENT_REGISTER.getRequestTypeValue(), "OPEN");
 
         if(allRegisterRequest == null){
             logger.severe("hodRegisterRequestAuthorization to " + approvalStatus + " request for HOD ID - "
@@ -354,7 +357,7 @@ public class LoginService {
         List<RegisterRequest> allRegisterRequest = registerRequestDAO.
                 getRequests(hod.getTeacherTypeId(),
                         hodID,
-                        RequestTypes.TEACHER_REGISTER.getRequestTypeValue(), approvalStatus);
+                        RequestTypes.TEACHER_REGISTER.getRequestTypeValue(), "OPEN");
 
         if(allRegisterRequest == null){
             logger.severe("teacherRegisterRequestAuthorization to " + approvalStatus + " request for Teacher id - "

@@ -42,14 +42,23 @@ public class RegisterRequestDAOImpl implements  RegisterRequestDAO {
         List<RegisterRequest> registerRequests = null;
 
         try {
+            logger.info("getRequests - executing query - " + SQL_GET_REQUESTS_BY_APPROVALS_ID_AND_TYPE);
+
             registerRequests = jdbcTemplate.query(SQL_GET_REQUESTS_BY_APPROVALS_ID_AND_TYPE,
-                    new Object[]{userTypeIdForApproval, userIdForApproval, requestType, status},
+                    new Object[]{userTypeIdForApproval, userIdForApproval,
+                            "'" + requestType + "'",
+                            "'" + status + "'"},
                     new RegisterRequestMaper());
         } catch (Exception e){
             logger.severe("Exception occurred in getRequests for approval type : "
                     + userTypeIdForApproval + " approval id: " + userIdForApproval + " request type: " + requestType + " status: " + status
                     + " and exception - " + e.getMessage());
         }
+
+        logger.info("Inside getRequests for approval type : " + userTypeIdForApproval
+                + " approval id: " + userIdForApproval + " request type: " + requestType
+                + " status: " + status + " request list " + registerRequests);
+
         return registerRequests;
     }
 
