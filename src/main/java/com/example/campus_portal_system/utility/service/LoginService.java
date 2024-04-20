@@ -116,7 +116,7 @@ public class LoginService {
                 return false;
             }
 
-            if(approvalStatus == "APPROVED"){
+            if(approvalStatus.equals("APPROVED")){
 
                 //create username and password
                 String userName = "";
@@ -268,7 +268,7 @@ public class LoginService {
                 return false;
             }
 
-            if(approvalStatus == "APPROVED"){
+            if(approvalStatus.equals("APPROVED")){
 
                 //create username and password
                 String userName = "";
@@ -419,7 +419,7 @@ public class LoginService {
                 return false;
             }
 
-            if(approvalStatus == "APPROVED"){
+            if(approvalStatus.equals("APPROVED")){
 
                 //create username and password
                 String userName = "";
