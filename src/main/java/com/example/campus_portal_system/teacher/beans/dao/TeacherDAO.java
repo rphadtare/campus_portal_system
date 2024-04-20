@@ -23,6 +23,8 @@ public interface TeacherDAO {
 
     Teacher getTeacherById(int teacher_id);
 
+    Teacher getTeacherByEmail(int institute_id, int department_id, String emailId);
+
     Boolean updateTeacherInfo(Teacher teacher);
 
     Boolean deleteTeacher(Teacher teacher);

@@ -135,6 +135,11 @@ public class RegisterService {
 
             //random pass code which will be provided to institute to authenticate admin at later stage
             String passCode = Helper.getPassCode(12);
+            Boolean adminCreateResult = adminDAO.createAdmin(admin);
+
+            //to get admin id from system
+            admin = adminDAO.getAdminInfo(institute.getInstitute_id(), admin.getEmailId());
+
 
             RegisterRequest registerRequest =
                     new RegisterRequest(1,
@@ -143,7 +148,6 @@ public class RegisterService {
                             UserTypes.INSTITUTE.getNumVal(),institute.getInstitute_id(),
                             "OPEN");
 
-            Boolean adminCreateResult = adminDAO.createAdmin(admin);
             Boolean registerRequestResult = registerRequestDAO.createRequest(registerRequest);
 
 
@@ -151,9 +155,6 @@ public class RegisterService {
             if(adminCreateResult && registerRequestResult){
                 logger.info("registerAdmin - successful adminCreateResult " + true
                         + " and registerRequestResult " + true);
-
-                //to get admin id from system
-                Admin updatedAdmin = adminDAO.getAdminInfo(institute.getInstitute_id(), admin.getEmailId());
 
                 //send mail to user and cc corresponding approval
                 String message = EmailMessageUtil.fetchMessageTemplate("registration")
@@ -171,7 +172,7 @@ public class RegisterService {
                         .replaceAll("email_id", admin.getEmailId())
                         .replaceAll("contact_no",admin.getContactNo())
                         .replaceAll("pass_code",passCode)
-                        .replaceAll("admin_id", String.valueOf(updatedAdmin.getAdminId()));
+                        .replaceAll("admin_id", String.valueOf(admin.getAdminId()));
 
                 logger.info(" message for user: " + message);
 
@@ -265,6 +266,8 @@ public class RegisterService {
             return false;
         }
 
+        boolean registerTeacherFlag = teacherDAO.createTeacher(teacher);
+        teacher = teacherDAO.getHOD(teacher.getInstituteId(), teacher.getDepartmentId());
 
         /**
          *  store register request details in database system
@@ -277,7 +280,6 @@ public class RegisterService {
                         UserTypes.INSTITUTE_ADMIN.getNumVal(),
                         admin.getAdminId(),"OPEN");
 
-        boolean registerTeacherFlag = teacherDAO.createTeacher(teacher);
         boolean registerRequestFlag = this.storeRequestDetails(registerRequest);
 
         logger.info("registerHeadOfDepartment - register HOD status : " +
@@ -338,7 +340,8 @@ public class RegisterService {
 
                 //Get approvals details
                 Teacher headOfDepartment = teacherDAO.getHOD(teacher.getInstituteId(), teacher.getDepartmentId());
-
+                boolean registerTeacherFlag = teacherDAO.createTeacher(teacher);
+                teacher = teacherDAO.getTeacherByEmail(teacher.getInstituteId(), teacher.getDepartmentId(), teacher.getEmailId());
 
                 RegisterRequest registerRequest =
                         new RegisterRequest(1,
@@ -347,7 +350,7 @@ public class RegisterService {
                                 headOfDepartment.getTeacherTypeId(),
                                 headOfDepartment.getTeacherId(),"OPEN");
 
-                boolean registerTeacherFlag = teacherDAO.createTeacher(teacher);
+
                 boolean registerRequestFlag = this.storeRequestDetails(registerRequest);
 
                 logger.info("registerTeacher - register teacher status : " +

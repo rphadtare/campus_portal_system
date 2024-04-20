@@ -58,6 +58,8 @@ public class TeacherDAOImpl implements TeacherDAO {
 
     public final String SQL_GET_TEACHER_BY_TEACHER_ID = "select * from teacher where teacher_id = ? and is_deleted = 1";
 
+    public final String SQL_GET_TEACHER_BY_EMAIL_ID= "select * from teacher where institute_id = %s and department_id = %s and email_id = '%s'";
+
     @Autowired
     public TeacherDAOImpl(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
@@ -90,7 +92,7 @@ public class TeacherDAOImpl implements TeacherDAO {
 
     @Override
     public Teacher getTeacherById(int institute_id, int teacher_id) {
-        logger.info("Inside getTeacherById ..");
+        logger.info("Inside getTeacherById for institute_id " + institute_id);
         return jdbcTemplate.queryForObject(SQL_GET_TEACHER_BY_ID, new Object[] {institute_id, teacher_id},
                 new TeacherMapper());
     }
@@ -110,6 +112,27 @@ public class TeacherDAOImpl implements TeacherDAO {
         }
 
        return teacher;
+    }
+
+    @Override
+    public Teacher getTeacherByEmail(int institute_id, int department_id, String emailId) {
+        logger.info("Inside getTeacherById for institute_id  " + institute_id
+        + " department_id: " + department_id + " email: " + emailId);
+        Teacher teacher = new Teacher(-1);
+
+        try{
+
+            String sql = String.format(SQL_GET_TEACHER_BY_TEACHER_ID, institute_id, department_id, emailId);
+
+            teacher = jdbcTemplate.queryForObject(sql, new TeacherMapper());
+
+        } catch (Exception e) {
+            logger.severe("Inside getTeacherById for institute_id  " + institute_id
+                            + " department_id: " + department_id + " email: " + emailId +
+                    "exception occurred - " + e.getMessage());
+        }
+
+        return teacher;
     }
 
     @Override
