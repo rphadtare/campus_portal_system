@@ -24,7 +24,7 @@ public class RegisterRequestDAOImpl implements  RegisterRequestDAO {
     }
 
     public final String SQL_GET_REQUESTS_BY_APPROVALS_ID_AND_TYPE = "select * from register_request " +
-            "where approver_type_id = ? and approver_id = ? and request_type = ? and status = ?";
+            "where approver_type_id = %s and approver_id = %s and request_type = %s and status = %s";
 
     public final String SQL_UPDATE_STATUS_OF_REQUEST = "update register_request" +
             "set" +
@@ -42,13 +42,19 @@ public class RegisterRequestDAOImpl implements  RegisterRequestDAO {
         List<RegisterRequest> registerRequests = null;
 
         try {
+
+            String sql = String.format(SQL_GET_REQUESTS_BY_APPROVALS_ID_AND_TYPE,
+                    userTypeIdForApproval,
+                    userIdForApproval,
+                    "'" + requestType + "'",
+                    "'" + status + "'"
+            );
+
             logger.info("getRequests - executing query - " + SQL_GET_REQUESTS_BY_APPROVALS_ID_AND_TYPE);
 
-            registerRequests = jdbcTemplate.query(SQL_GET_REQUESTS_BY_APPROVALS_ID_AND_TYPE,
-                    new Object[]{userTypeIdForApproval, userIdForApproval,
-                            "'" + requestType + "'",
-                            "'" + status + "'"},
+            registerRequests = jdbcTemplate.query(sql,
                     new RegisterRequestMaper());
+
         } catch (Exception e){
             logger.severe("Exception occurred in getRequests for approval type : "
                     + userTypeIdForApproval + " approval id: " + userIdForApproval + " request type: " + requestType + " status: " + status

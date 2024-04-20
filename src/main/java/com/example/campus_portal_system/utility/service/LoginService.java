@@ -84,7 +84,10 @@ public class LoginService {
 
         String searchInformation = admin.toString() + "_passcode:" + passCode;
 
-        List<RegisterRequest> filteredRequestList =  allRegisterRequest.stream().filter(r -> r.getRequestInformation().equalsIgnoreCase(searchInformation))
+        logger.info("adminRegisterRequestAuthorization - searchInformation " + searchInformation);
+
+        List<RegisterRequest> filteredRequestList =  allRegisterRequest.stream().
+                filter(r -> r.getRequestInformation().equalsIgnoreCase(searchInformation))
                 .collect(Collectors.toList());
 
         logger.info("adminRegisterRequestAuthorization - filteredRequestList " + filteredRequestList);

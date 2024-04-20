@@ -18,9 +18,9 @@ public class AdminDAOImpl implements AdminDAO {
     private Logger logger = Logger.getLogger(AdminDAOImpl.class.getName());
 
     private final String SQL_CREATE_ADMIN = "insert into admin(institute_id, admin_type_id," +
-            "salutations, first_name, middle_name, last_name," +
+            "salutations, first_name, middle_name, last_name,qualifications" +
             "email_id, contact_no, is_deleted)" +
-            "values(?,?,?,?,?,?,?,?,0)";
+            "values(?,?,?,?,?,?,?,?,?,0)";
 
     private final String SQL_UPDATE_ADMIN = "update admin" +
             "set" +
@@ -56,6 +56,7 @@ public class AdminDAOImpl implements AdminDAO {
                     admin.getFirstName(),
                     admin.getMiddleName(),
                     admin.getLastName(),
+                    admin.getQualifications(),
                     admin.getEmailId(),
                     admin.getContactNo()
             );
