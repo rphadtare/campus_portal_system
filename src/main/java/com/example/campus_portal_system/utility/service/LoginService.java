@@ -127,7 +127,7 @@ public class LoginService {
 
                     //to check if username doesn't exist already in login table
 
-                    userName = admin.getFirstName().substring(0,4) + admin.getLastName().substring(0,4)
+                    userName = admin.getFirstName().substring(0,2) + admin.getLastName().substring(0,2)
                             + "_" + Helper.getPassCode(3);
 
                     passWord = Helper.getPassCode(12);
@@ -157,7 +157,7 @@ public class LoginService {
                     //send email to user with username and password
                     message = EmailMessageUtil.fetchMessageTemplate("authorization")
                             .replaceAll("user",admin.getFullName())
-                            .replaceAll("user_name",userName)
+                            .replaceAll("login_id",userName)
                             .replaceAll("pass_word",passWord);
 
                     logger.info("registerAdmin - login credentials message for user: " + message);
@@ -279,7 +279,7 @@ public class LoginService {
 
                     //to check if username doesn't exist already in login table
 
-                    userName = hod.getFirstName().substring(0,4) + hod.getLastName().substring(0,4)
+                    userName = hod.getFirstName().substring(0,2) + hod.getLastName().substring(0,2)
                             + "_" + Helper.getPassCode(3);
 
                     passWord = Helper.getPassCode(12);
@@ -309,7 +309,7 @@ public class LoginService {
                     //send email to user with username and password
                     message = EmailMessageUtil.fetchMessageTemplate("authorization")
                             .replaceAll("user",hod.getFullName())
-                            .replaceAll("user_name",userName)
+                            .replaceAll("login_id",userName)
                             .replaceAll("pass_word",passWord);
 
                     logger.info("hodRegisterRequestAuthorization - login credentials message for user: " + message);
@@ -430,7 +430,7 @@ public class LoginService {
 
                     //to check if username doesn't exist already in login table
 
-                    userName = teacher.getFirstName().substring(0,4) + teacher.getLastName().substring(0,4)
+                    userName = teacher.getFirstName().substring(0,2) + teacher.getLastName().substring(0,2)
                             + "_" + Helper.getPassCode(3);
 
                     passWord = Helper.getPassCode(12);
@@ -460,7 +460,7 @@ public class LoginService {
                     //send email to user with username and password
                     message = EmailMessageUtil.fetchMessageTemplate("authorization")
                             .replaceAll("user",teacher.getFullName())
-                            .replaceAll("user_name",userName)
+                            .replaceAll("login_id",userName)
                             .replaceAll("pass_word",passWord);
 
                     logger.info("teacherRegisterRequestAuthorization - login credentials message for user: " + message);

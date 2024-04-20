@@ -1,7 +1,7 @@
 Dear user,
 Congratulations !!
 Your request_type request has been approved.
-Your username and password will be shared with you separately soon.
+Your login id and password will be shared with you separately soon.
 
 Have a good day ahead!
 

@@ -18,9 +18,9 @@ public class LoginDAOImpl implements  LoginDAO {
     private Logger logger;
 
     private final String SQL_CREATE_LOGIN = "insert into login(user_type," +
-            "user_name, password" +
+            "user_name, password, " +
             "is_deleted)" +
-            "values(?,?,?,1)";
+            " values(?,?,?,1)";
 
     private final String SQL_DELETE_LOGIN = "update login" +
             "set" +

@@ -1,6 +1,6 @@
 Dear user,
 Please find below credentials to Login with campus portal system -
-Username: user_name
+Login ID: login_id
 Password: pass_word
 
 Have a good day ahead!

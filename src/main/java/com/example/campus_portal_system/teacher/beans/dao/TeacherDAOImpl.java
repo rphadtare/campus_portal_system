@@ -41,19 +41,19 @@ public class TeacherDAOImpl implements TeacherDAO {
 
     private final String SQL_INSERT_TEACHER_INFO = "insert into teacher(institute_id, department_id, " +
             "teacher_type_id, salutations, " +
-            "first_name, middle_name, last_name," +
-            "qualifications, email_id, contact_no," +
+            "first_name, middle_name, last_name, " +
+            "qualifications, email_id, contact_no, " +
             "is_deleted)" +
             "values(?,?,?,?,?,?,?,?,?,?,1)";
 
     public final String SQL_ACTIVATE_TEACHER = "update teacher set is_deleted = 1 where institute_id = ? and teacher_id = ?";
 
     public final String SQL_CHECK_IF_HOD_EXIST = "select * from teacher where institute_id = ? and department_id = ?" +
-            "and teacherTypeId in (" + UserTypes.HEAD_OF_DEPARTMENT.getNumVal() + "," +
+            " and teacher_type_id in (" + UserTypes.HEAD_OF_DEPARTMENT.getNumVal() + "," +
             UserTypes.HEAD_OF_DEPARTMENT_AND_CLASS_TEACHER.getNumVal() + ") limit 1";
 
     public final String SQL_GET_HOD = "select * from teacher where institute_id = ? and department_id = ?" +
-            "and teacherTypeId in (" + UserTypes.HEAD_OF_DEPARTMENT.getNumVal() + "," +
+            " and teacher_type_id in (" + UserTypes.HEAD_OF_DEPARTMENT.getNumVal() + "," +
             UserTypes.HEAD_OF_DEPARTMENT_AND_CLASS_TEACHER.getNumVal() + ")";
 
     public final String SQL_GET_TEACHER_BY_TEACHER_ID = "select * from teacher where teacher_id = ? and is_deleted = 1";
