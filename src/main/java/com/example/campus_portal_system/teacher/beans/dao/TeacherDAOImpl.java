@@ -46,7 +46,7 @@ public class TeacherDAOImpl implements TeacherDAO {
             "is_deleted)" +
             "values(?,?,?,?,?,?,?,?,?,?,1)";
 
-    public final String SQL_ACTIVATE_TEACHER = "update teacher set is_deleted = 0 where institute_id = ? and teacher_id = ?";
+    public final String SQL_ACTIVATE_TEACHER = "update teacher set is_deleted = 1 where institute_id = ? and teacher_id = ?";
 
     public final String SQL_CHECK_IF_HOD_EXIST = "select * from teacher where institute_id = ? and department_id = ?" +
             "and teacherTypeId in (" + UserTypes.HEAD_OF_DEPARTMENT.getNumVal() + "," +
@@ -155,8 +155,22 @@ public class TeacherDAOImpl implements TeacherDAO {
 
     @Override
     public Boolean activateTeacher(int institute_id, int teacher_id) {
-        logger.info("Inside activateTeacher ...");
-        return jdbcTemplate.update(SQL_ACTIVATE_TEACHER, institute_id, teacher_id) > 0;
+        logger.info("Inside activateTeacher to activate teacher id " + teacher_id );
+        int result = 0;
+        try {
+            result = jdbcTemplate.update(SQL_ACTIVATE_TEACHER, institute_id, teacher_id);
+        } catch (Exception e){
+            logger.severe("activateTeacher - exception occurred while activtaing record for teacher id " + teacher_id
+                    + " and exception - " + e.getMessage());
+        }
+
+        logger.info("activateTeacher to activate teacher id " + teacher_id + " result " + result);
+
+        if(result == 0){
+            return false;
+        } else  {
+            return true;
+        }
     }
 
     @Override
