@@ -29,7 +29,7 @@ public class AdminDAOImpl implements AdminDAO {
             "qualifications = ?, email_id = ?, contact_no = ?" +
             "where institute_id = ? and admin_id = ?";
 
-    private final String SQL_DELETE_ADMIN = "delete from admin where admin_id = ? amd institute_id = ?";
+    private final String SQL_DELETE_ADMIN = "delete from admin where admin_id = ? and institute_id = ?";
 
     private final String SQL_GET_ADMIN_INFO = "select * from admin where institute_id = ?";
 
