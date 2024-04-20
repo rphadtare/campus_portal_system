@@ -29,6 +29,10 @@ public class EmailMessageUtil {
                 fileName = "registration_unsuccessful_message.txt";
                 break;
 
+            case "registration_request_deny":
+                fileName = "registration_request_deny.txt";
+                break;
+
             case "admin_not_present":
                 fileName = "admin_not_present.txt";
                 break;
@@ -48,6 +52,15 @@ public class EmailMessageUtil {
             case "hod_not_exist":
                 fileName = "HOD_not_exist.txt";
                 break;
+
+            case "login":
+                fileName = "login_success.txt";
+                break;
+
+            case "authorization":
+                fileName = "authorization_success.txt";
+                break;
+
 
         }
 

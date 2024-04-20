@@ -1,0 +1,9 @@
+Dear user,
+Please find below credentials to Login with campus portal system -
+Username: user_name
+Password: pass_word
+
+Have a good day ahead!
+
+Best regards,
+Campus Portal System

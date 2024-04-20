@@ -16,4 +16,6 @@ public interface LoginDAO {
 
     public List<Login> getAllLogin(int userTypeId);
 
+    public boolean checkUserNameExist(String userName);
+
 }

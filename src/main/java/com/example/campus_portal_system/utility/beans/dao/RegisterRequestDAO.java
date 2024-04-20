@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface RegisterRequestDAO {
 
-    public List<RegisterRequest> getRequests(int userTypeIdForApproval, int userIdForApproval);
+    public List<RegisterRequest> getRequests(int userTypeIdForApproval, int userIdForApproval, String requestType, String status );
 
     public Boolean updateStatusOfRequest(RegisterRequest registerRequest);
 

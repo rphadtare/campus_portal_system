@@ -33,6 +33,8 @@ public class LoginDAOImpl implements  LoginDAO {
 
     private final String SQL_GET_ALL_LOGIN_OF_USERS = "select * from login where user_type = ?";
 
+    private final String SQL_CHECK_USERNAME_EXIST = "select COALESCE(count(1), 0) as count from login where user_name = ? and is_deleted = ?";
+
 
     @Autowired
     public LoginDAOImpl(DataSource dataSource) {
@@ -76,5 +78,18 @@ public class LoginDAOImpl implements  LoginDAO {
     public List<Login> getAllLogin(int userTypeId) {
         logger.info("Inside getAllLogin of user type : " + userTypeId);
         return jdbcTemplate.query(SQL_GET_ALL_LOGIN_OF_USERS, new Object[] {userTypeId}, new LoginMapper());
+    }
+
+    @Override
+    public boolean checkUserNameExist(String userName) {
+        logger.info("Inside checkUserNameExist for user name " + userName);
+        int count = jdbcTemplate.queryForObject(SQL_CHECK_USERNAME_EXIST, new Object[]{userName, 0}, Integer.class);
+
+        logger.info("Inside checkUserNameExist for user name " + userName + " and record count: " + count);
+        if(count > 0){
+            return true;
+        } else {
+            return false;
+        }
     }
 }

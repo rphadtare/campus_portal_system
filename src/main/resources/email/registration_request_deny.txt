@@ -1,0 +1,8 @@
+Dear user,
+Unfortunately, your request_type request has been denied.
+Please check with CC mail for further questions.
+
+Have a good day ahead!
+
+Best regards,
+Campus Portal System

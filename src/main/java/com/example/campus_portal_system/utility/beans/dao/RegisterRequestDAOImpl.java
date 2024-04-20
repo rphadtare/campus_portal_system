@@ -24,7 +24,7 @@ public class RegisterRequestDAOImpl implements  RegisterRequestDAO {
     }
 
     public final String SQL_GET_REQUESTS_BY_APPROVALS_ID_AND_TYPE = "select * from register_request " +
-            "where approver_type_id = ? and approver_id = ?";
+            "where approver_type_id = ? and approver_id = ? and request_type = ? and status = ?";
 
     public final String SQL_UPDATE_STATUS_OF_REQUEST = "update register_request" +
             "set" +
@@ -36,11 +36,21 @@ public class RegisterRequestDAOImpl implements  RegisterRequestDAO {
             "values(?,?,?,?,?)";
 
     @Override
-    public List<RegisterRequest> getRequests(int userTypeIdForApproval, int userIdForApproval) {
-        logger.info("Inside getRequests ...");
-        return jdbcTemplate.query(SQL_GET_REQUESTS_BY_APPROVALS_ID_AND_TYPE,
-                new Object[]{userTypeIdForApproval, userIdForApproval},
-                new RegisterRequestMaper());
+    public List<RegisterRequest> getRequests(int userTypeIdForApproval, int userIdForApproval, String requestType, String status) {
+        logger.info("Inside getRequests for approval type : " + userTypeIdForApproval
+                + " approval id: " + userIdForApproval + " request type: " + requestType + " status: " + status);
+        List<RegisterRequest> registerRequests = null;
+
+        try {
+            registerRequests = jdbcTemplate.query(SQL_GET_REQUESTS_BY_APPROVALS_ID_AND_TYPE,
+                    new Object[]{userTypeIdForApproval, userIdForApproval, requestType, status},
+                    new RegisterRequestMaper());
+        } catch (Exception e){
+            logger.severe("Exception occurred in getRequests for approval type : "
+                    + userTypeIdForApproval + " approval id: " + userIdForApproval + " request type: " + requestType + " status: " + status
+                    + " and exception - " + e.getMessage());
+        }
+        return registerRequests;
     }
 
     @Override

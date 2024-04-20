@@ -134,7 +134,7 @@ public class RegisterService {
             }
 
             //random pass code which will be provided to institute to authenticate admin at later stage
-            String passCode = Helper.getPassCode();
+            String passCode = Helper.getPassCode(12);
 
             RegisterRequest registerRequest =
                     new RegisterRequest(1,
