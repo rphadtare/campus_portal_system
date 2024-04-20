@@ -77,7 +77,7 @@ public class RegisterService {
                 String message = EmailMessageUtil.fetchMessageTemplate("institute_onboard_success")
                         .replaceAll("institute",institute.getName());
 
-                logger.info(" message for user: " + message);
+                logger.info("registerInstitute - Onboarded successfully - message for user: " + message);
 
                 emailService.SendEmail(institute.getEmail_id(), "Onboarded successfully!!", message);
 
@@ -86,7 +86,7 @@ public class RegisterService {
                 String message = EmailMessageUtil.fetchMessageTemplate("institute_onboard_failed")
                         .replaceAll("institute",institute.getName());
 
-                logger.info(" message for user: " + message);
+                logger.info("registerInstitute - Onboarding failed - message for user: " + message);
 
                 emailService.SendEmail(institute.getEmail_id(), "Onboarding failed!!", message);
                 logger.severe("registerInstitute failed due to technical issue to register institute " + institute);
@@ -125,7 +125,7 @@ public class RegisterService {
                         .replaceAll("user",admin.getFullName())
                         .replaceAll("institute_name", institute.getName());
 
-                logger.info(" message for user: " + message);
+                logger.info("registerAdmin - admin already exist - message for user: " + message);
 
                 emailService.SendEmail(admin.getEmailId(),
                         institute.getEmail_id(), "Admin registration failed !!", message);
@@ -148,6 +148,8 @@ public class RegisterService {
 
             //send email of registration to user and institute
             if(adminCreateResult && registerRequestResult){
+                logger.info("registerAdmin - successful adminCreateResult " + true
+                        + " and registerRequestResult " + true);
 
                 //to get admin id from system
                 Admin updatedAdmin = adminDAO.getAdminInfo(institute.getInstitute_id(), admin.getEmailId());
@@ -156,7 +158,7 @@ public class RegisterService {
                 String message = EmailMessageUtil.fetchMessageTemplate("registration")
                         .replaceAll("user",admin.getFullName());
 
-                logger.info(" message for user: " + message);
+                logger.info("registerAdmin - successful registration message for user: " + message);
 
                 emailService.SendEmail(admin.getEmailId(),
                         institute.getEmail_id(), "Thanks for registration !!", message);
@@ -178,10 +180,14 @@ public class RegisterService {
             }
             //send email of unsuccessful registration to user and institute
             else {
+
+                logger.severe("registerAdmin - failure occurred due to adminCreateResult " + adminCreateResult
+                        + " and registerRequestResult " + registerRequestResult);
+
                 String message = EmailMessageUtil.fetchMessageTemplate("registration_failed")
                         .replaceAll("user",admin.getFirstName() + " " + admin.getLastName());
 
-                logger.info(" message for user: " + message);
+                logger.info("registerAdmin - unsuccessful registration message for user: " + message);
                 emailService.SendEmail(admin.getEmailId(),
                         institute.getEmail_id(), "Admin registration failed !!", message);
 
@@ -192,7 +198,6 @@ public class RegisterService {
             return false;
         }
     }
-
 
     private boolean registerHeadOfDepartment(AnnotationConfigApplicationContext context, TeacherDAO teacherDAO, Teacher teacher){
 
@@ -219,7 +224,7 @@ public class RegisterService {
                     .replaceAll("user",teacher.getFullName())
                     .replaceAll("institute_name",institute.getName());
 
-            logger.info("registerHeadOfDepartment- message for user: " + message);
+            logger.info("registerHeadOfDepartment- Admin details are not present message for user: " + message);
             emailService.SendEmail(teacher.getEmailId(),
                     institute.getEmail_id(), "Unable to register !!", message);
 
@@ -251,7 +256,7 @@ public class RegisterService {
                     .replaceAll("department_name", department.getDepartmentName())
                     .replaceAll("institute_name", institute.getName());
 
-            logger.info("registerHeadOfDepartment- message for user: " + message);
+            logger.info("registerHeadOfDepartment- HOD already exist message for user: " + message);
 
             emailService.SendEmail(admin.getEmailId(),
                     institute.getEmail_id(), "Admin registration failed !!", message);
@@ -275,6 +280,9 @@ public class RegisterService {
                 "register request status " + registerRequestFlag);
 
         if(registerTeacherFlag && registerRequestFlag) {
+
+            logger.info("registerAdmin - successful registerHODFlag " + true + " and registerRequestResult " + true);
+
             //send mail to user and cc corresponding approval
             String message = EmailMessageUtil.fetchMessageTemplate("registration")
                     .replaceAll("user",teacher.getFullName());
@@ -284,6 +292,10 @@ public class RegisterService {
 
             return true;
         } else {
+
+            logger.severe("registerHeadOfDepartment - failure occurred due to registerHODFlag " + registerTeacherFlag
+                    + " and registerRequestResult " + registerRequestFlag);
+
             String message = EmailMessageUtil.fetchMessageTemplate("registration_failed")
                     .replaceAll("user",teacher.getFullName());
             logger.info("registerHeadOfDepartment - message for user: " + message);
@@ -294,8 +306,6 @@ public class RegisterService {
         }
 
     }
-
-
 
     public Boolean registerTeacher(Teacher teacher){
         /***
@@ -340,7 +350,9 @@ public class RegisterService {
                     //send mail to user and cc corresponding approval
                     String message = EmailMessageUtil.fetchMessageTemplate("registration")
                             .replaceAll("user",teacher.getFullName());
-                    logger.info("registerTeacher - message for user: " + message);
+
+                    logger.info("registerTeacher - successful message for user: " + message);
+
                     emailService.SendEmail(teacher.getEmailId(),
                             headOfDepartment.getEmailId(), "Thanks for registration !!", message);
 
@@ -348,7 +360,9 @@ public class RegisterService {
                 } else {
                     String message = EmailMessageUtil.fetchMessageTemplate("registration_failed")
                             .replaceAll("user",teacher.getFullName());
-                    logger.info("registerTeacher - message for user: " + message);
+
+                    logger.info("registerTeacher - failure message for user: " + message);
+
                     emailService.SendEmail(teacher.getEmailId(),
                             headOfDepartment.getEmailId(), "Thanks for registration !!", message);
 
@@ -357,15 +371,18 @@ public class RegisterService {
 
             } else {
 
-                logger.severe("registerTeacher- HOD details are not present for institute id " + teacher.getInstituteId());
                 Institute institute = instituteDAO.getInstituteById(teacher.getInstituteId());
                 Department department = departmentDAO.getDepartmentByID(teacher.getDepartmentId());
+
+                logger.severe("registerTeacher- HOD details are not present for institute " + institute.toString());
 
                 String message = EmailMessageUtil.fetchMessageTemplate("hod_not_exist")
                         .replaceAll("user",teacher.getFullName())
                         .replaceAll("department_name",department.getDepartmentName())
                         .replaceAll("institute_name",institute.getName());
-                logger.info("registerTeacher - message for user: " + message);
+
+                logger.info("registerTeacher - HOD details are not present message for user: " + message);
+
                 emailService.SendEmail(teacher.getEmailId(),
                         institute.getEmail_id(), "Unable to register !!", message);
 
