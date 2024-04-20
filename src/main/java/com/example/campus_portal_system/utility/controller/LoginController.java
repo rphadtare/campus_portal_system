@@ -69,8 +69,15 @@ public class LoginController {
             @RequestParam("approval") String approval
     ) {
 
+        logger.info("Inside approve_admin_registration for " + approval + " of admin id " + adminId);
+        boolean flag = service.adminRegisterRequestAuthorization(adminId,instituteId,approval,passCode);
+        logger.info("approve_admin_registration for " + approval + " of admin id " + adminId + " final result: " + flag);
 
-        return null;
+        if(flag){
+            return "admin_approved";
+        } else {
+            return "admin_approval_denied";
+        }
     }
 
 
