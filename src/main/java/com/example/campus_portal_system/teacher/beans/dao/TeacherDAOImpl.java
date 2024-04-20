@@ -93,7 +93,7 @@ public class TeacherDAOImpl implements TeacherDAO {
     @Override
     public Teacher getTeacherById(int institute_id, int teacher_id) {
         logger.info("Inside getTeacherById for institute_id " + institute_id);
-        return jdbcTemplate.queryForObject(SQL_GET_TEACHER_BY_ID, new Object[] {institute_id, teacher_id},
+        return jdbcTemplate.queryForObject(SQL_GET_TEACHER_BY_TYPE_FROM_INSTITUTE, new Object[] {institute_id, teacher_id},
                 new TeacherMapper());
     }
 
