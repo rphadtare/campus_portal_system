@@ -137,7 +137,8 @@ public class RegisterService {
             String passCode = Helper.getPassCode();
 
             RegisterRequest registerRequest =
-                    new RegisterRequest(1,"Admin Register",
+                    new RegisterRequest(1,
+                            RequestTypes.INSTITUTE_ADMIN_REGISTER.getRequestTypeValue(),
                             admin.toString() + "_passcode:" + passCode,
                             UserTypes.INSTITUTE.getNumVal(),institute.getInstitute_id(),
                             "OPEN");
@@ -270,7 +271,11 @@ public class RegisterService {
          */
 
         RegisterRequest registerRequest =
-                new RegisterRequest(1,"HOD Register",teacher.toString(), admin.getAdminTypeId(),admin.getAdminId(),"OPEN");
+                new RegisterRequest(1,
+                        RequestTypes.HEAD_OF_DEPARTMENT_REGISTER.getRequestTypeValue(),
+                        teacher.toString(),
+                        UserTypes.INSTITUTE_ADMIN.getNumVal(),
+                        admin.getAdminId(),"OPEN");
 
         boolean registerTeacherFlag = teacherDAO.createTeacher(teacher);
         boolean registerRequestFlag = this.storeRequestDetails(registerRequest);
@@ -336,7 +341,10 @@ public class RegisterService {
 
 
                 RegisterRequest registerRequest =
-                        new RegisterRequest(1,"Teacher Register",teacher.toString(), headOfDepartment.getTeacherTypeId(),
+                        new RegisterRequest(1,
+                                RequestTypes.TEACHER_REGISTER.getRequestTypeValue(),
+                                teacher.toString(),
+                                headOfDepartment.getTeacherTypeId(),
                                 headOfDepartment.getTeacherId(),"OPEN");
 
                 boolean registerTeacherFlag = teacherDAO.createTeacher(teacher);
