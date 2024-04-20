@@ -116,18 +116,18 @@ public class TeacherDAOImpl implements TeacherDAO {
 
     @Override
     public Teacher getTeacherByEmail(int institute_id, int department_id, String emailId) {
-        logger.info("Inside getTeacherById for institute_id  " + institute_id
+        logger.info("Inside getTeacherByEmail for institute_id  " + institute_id
         + " department_id: " + department_id + " email: " + emailId);
         Teacher teacher = new Teacher(-1);
 
         try{
 
-            String sql = String.format(SQL_GET_TEACHER_BY_TEACHER_ID, institute_id, department_id, emailId);
+            String sql = String.format(SQL_GET_TEACHER_BY_EMAIL_ID, institute_id, department_id, emailId);
 
             teacher = jdbcTemplate.queryForObject(sql, new TeacherMapper());
 
         } catch (Exception e) {
-            logger.severe("Inside getTeacherById for institute_id  " + institute_id
+            logger.severe("Inside getTeacherByEmail for institute_id  " + institute_id
                             + " department_id: " + department_id + " email: " + emailId +
                     "exception occurred - " + e.getMessage());
         }
