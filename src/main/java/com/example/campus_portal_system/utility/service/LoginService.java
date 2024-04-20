@@ -174,17 +174,27 @@ public class LoginService {
 
             } else {
 
-                //send mail of denial to requester
-                String message = EmailMessageUtil.fetchMessageTemplate("registration_request_deny")
-                        .replaceAll("user",admin.getFullName())
-                        .replaceAll("request_type",RequestTypes.INSTITUTE_ADMIN_REGISTER.getRequestTypeValue());
+                //Delete user from admin table
+                if(adminDAO.deleteAdmin(admin)){
+                    //send mail of denial to requester
+                    String message = EmailMessageUtil.fetchMessageTemplate("registration_request_deny")
+                            .replaceAll("user",admin.getFullName())
+                            .replaceAll("request_type",RequestTypes.INSTITUTE_ADMIN_REGISTER.getRequestTypeValue());
 
-                logger.info("adminRegisterRequestAuthorization - denial message for user: " + message);
+                    logger.info("adminRegisterRequestAuthorization - denial message for user: " + message);
 
-                emailService.SendEmail(admin.getEmailId(),
-                        institute.getEmail_id(), "Notification - registration request denied !!", message);
+                    emailService.SendEmail(admin.getEmailId(),
+                            institute.getEmail_id(), "Notification - registration request denied !!", message);
 
-                return true;
+                    return true;
+                } else {
+                    logger.severe("adminRegisterRequestAuthorization to " + approvalStatus + " request for admin id - "
+                            + adminId + " failed to delete record from admin table");
+                    return false;
+                }
+
+
+
             }
 
         }
@@ -316,17 +326,25 @@ public class LoginService {
 
             } else {
 
-                //send mail of denial to requester
-                String message = EmailMessageUtil.fetchMessageTemplate("registration_request_deny")
-                        .replaceAll("user",hod.getFullName())
-                        .replaceAll("request_type",RequestTypes.HEAD_OF_DEPARTMENT_REGISTER.getRequestTypeValue());
+                if(teacherDAO.deleteTeacher(hod)){
+                    //send mail of denial to requester
+                    String message = EmailMessageUtil.fetchMessageTemplate("registration_request_deny")
+                            .replaceAll("user",hod.getFullName())
+                            .replaceAll("request_type",RequestTypes.HEAD_OF_DEPARTMENT_REGISTER.getRequestTypeValue());
 
-                logger.info("hodRegisterRequestAuthorization - denial message for user: " + message);
+                    logger.info("hodRegisterRequestAuthorization - denial message for user: " + message);
 
-                emailService.SendEmail(hod.getEmailId(),
-                        admin.getEmailId(), "Notification - registration request denied !!", message);
+                    emailService.SendEmail(hod.getEmailId(),
+                            admin.getEmailId(), "Notification - registration request denied !!", message);
 
-                return true;
+                    return true;
+                } else {
+                    logger.severe("hodRegisterRequestAuthorization to " + approvalStatus + " request for HOD - "
+                            + teacherId + " failed to delete hod record from teacher table");
+                    return false;
+                }
+
+
             }
 
         }
@@ -453,23 +471,31 @@ public class LoginService {
 
                 } else {
                     logger.severe("teacherRegisterRequestAuthorization to " + approvalStatus + " request for teacher - "
-                            + teacherId + " failed to create login");
+                            + teacherId + " failed to create login !!");
                     return false;
                 }
 
             } else {
 
-                //send mail of denial to requester
-                String message = EmailMessageUtil.fetchMessageTemplate("registration_request_deny")
-                        .replaceAll("user",teacher.getFullName())
-                        .replaceAll("request_type",RequestTypes.TEACHER_REGISTER.getRequestTypeValue());
+                if(teacherDAO.deleteTeacher(teacher)){
+                    //send mail of denial to requester
+                    String message = EmailMessageUtil.fetchMessageTemplate("registration_request_deny")
+                            .replaceAll("user",teacher.getFullName())
+                            .replaceAll("request_type",RequestTypes.TEACHER_REGISTER.getRequestTypeValue());
 
-                logger.info("teacherRegisterRequestAuthorization - denial message for user: " + message);
+                    logger.info("teacherRegisterRequestAuthorization - denial message for user: " + message);
 
-                emailService.SendEmail(teacher.getEmailId(),
-                        hod.getEmailId(), "Notification - registration request denied !!", message);
+                    emailService.SendEmail(teacher.getEmailId(),
+                            hod.getEmailId(), "Notification - registration request denied !!", message);
 
-                return true;
+                    return true;
+                } else {
+                    logger.severe("teacherRegisterRequestAuthorization to " + approvalStatus + " request for teacher - "
+                            + teacherId + " failed to delete teacher record !!");
+                    return false;
+                }
+
+
             }
 
         }

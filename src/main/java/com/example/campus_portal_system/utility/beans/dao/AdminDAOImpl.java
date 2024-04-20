@@ -29,6 +29,8 @@ public class AdminDAOImpl implements AdminDAO {
             "qualifications = ?, email_id = ?, contact_no = ?" +
             "where institute_id = ? and admin_id = ?";
 
+    private final String SQL_DELETE_ADMIN = "delete from admin where admin_id = ? amd institute_id = ?";
+
     private final String SQL_GET_ADMIN_INFO = "select * from admin where institute_id = ?";
 
     private final String SQL_GET_ADMIN_INFO_BY_INSTITUTE_AND_EMAIL_ID = "select * from admin where institute_id = ?" +
@@ -159,5 +161,29 @@ public class AdminDAOImpl implements AdminDAO {
             logger.severe("Inside getAdminInfoByAdminId exception occurred - " + e.getMessage());
         }
         return new Admin(-1);
+    }
+
+    @Override
+    public Boolean deleteAdmin(Admin admin) {
+        logger.info("Inside deleteAdmin for admin " + admin);
+        int result = 0;
+
+        try {
+
+            result = jdbcTemplate.update(
+                    SQL_DELETE_ADMIN,
+                    admin.getAdminId(),admin.getInstituteId());
+
+        } catch(Exception e) {
+            logger.severe("Exception occurred while deleting " + admin + " Exception details are -" + e.getMessage());
+            result = 0;
+        }
+
+        if(result > 0) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }

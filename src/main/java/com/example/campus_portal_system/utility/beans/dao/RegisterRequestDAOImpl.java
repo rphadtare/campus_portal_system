@@ -27,12 +27,12 @@ public class RegisterRequestDAOImpl implements  RegisterRequestDAO {
             "where approver_type_id = %s and approver_id = %s and request_type = %s and status = %s";
 
     public final String SQL_UPDATE_STATUS_OF_REQUEST = "update register_request" +
-            "set" +
-            "status = ?" +
-            "where id = ?";
+            " set" +
+            " status = ?" +
+            " where id = ?";
 
     public final String SQL_CREATE_REQUEST = "insert into register_request" +
-            "(request_type,request_information,approver_type_id,approver_id,status)" +
+            "(request_type,request_information,approver_type_id,approver_id,status) " +
             "values(?,?,?,?,?)";
 
     @Override

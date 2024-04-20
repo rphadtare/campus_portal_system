@@ -16,4 +16,6 @@ public interface AdminDAO {
 
     public Admin getAdminInfoByAdminId(int adminId);
 
+    public Boolean deleteAdmin(Admin admin);
+
 }
