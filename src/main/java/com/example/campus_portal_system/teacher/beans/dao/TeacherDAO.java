@@ -21,6 +21,8 @@ public interface TeacherDAO {
 
     Teacher getTeacherById(int institute_id, int teacher_id);
 
+    Teacher getTeacherById(int teacher_id);
+
     Boolean updateTeacherInfo(Teacher teacher);
 
     Boolean deleteTeacher(Teacher teacher);

@@ -98,5 +98,24 @@ public class LoginController {
         }
     }
 
+    @RequestMapping(value = "/approve_teacher_registration", method = RequestMethod.POST)
+    public String approveTeacherRegistration(
+            @RequestParam("hodId") int hodId,
+            @RequestParam("teacherId") int teacherId,
+            @RequestParam("approval") String approval
+    ) {
+
+        logger.info("Inside approve_hod_registration for " + approval + " of teacher id " + teacherId);
+        boolean flag = service.teacherRegisterRequestAuthorization(hodId,teacherId,approval);
+        logger.info("approve_hod_registration for " + approval + " of teacher ID " + teacherId + " final result: " + flag);
+
+        if(flag){
+            return "hod_approved";
+        } else {
+            return "hod_approval_denied";
+        }
+    }
+
+
 
 }

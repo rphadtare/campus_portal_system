@@ -56,6 +56,8 @@ public class TeacherDAOImpl implements TeacherDAO {
             "and teacherTypeId in (" + UserTypes.HEAD_OF_DEPARTMENT.getNumVal() + "," +
             UserTypes.HEAD_OF_DEPARTMENT_AND_CLASS_TEACHER.getNumVal() + ")";
 
+    public final String SQL_GET_TEACHER_BY_TEACHER_ID = "select * from teacher where teacher_id = ? and is_deleted = 1";
+
     @Autowired
     public TeacherDAOImpl(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
@@ -91,6 +93,23 @@ public class TeacherDAOImpl implements TeacherDAO {
         logger.info("Inside getTeacherById ..");
         return jdbcTemplate.queryForObject(SQL_GET_TEACHER_BY_ID, new Object[] {institute_id, teacher_id},
                 new TeacherMapper());
+    }
+
+    @Override
+    public Teacher getTeacherById(int teacher_id) {
+        logger.info("Inside getTeacherById for teacher id " + teacher_id );
+        Teacher teacher = new Teacher(-1);
+
+        try{
+            teacher = jdbcTemplate.queryForObject(SQL_GET_TEACHER_BY_TEACHER_ID,
+                    new Object[]{teacher_id}, new TeacherMapper());
+
+        } catch (Exception e) {
+            logger.severe("Inside getTeacherById for teacher id " + teacher_id +
+                    "exception occurred - " + e.getMessage());
+        }
+
+       return teacher;
     }
 
     @Override
