@@ -320,7 +320,7 @@ public class LoginService {
                 emailService.SendEmail(hod.getEmailId(),
                         admin.getEmailId(), "Notification - registration request denied !!", message);
 
-                return false;
+                return true;
             }
 
         }
@@ -463,7 +463,7 @@ public class LoginService {
                 emailService.SendEmail(teacher.getEmailId(),
                         hod.getEmailId(), "Notification - registration request denied !!", message);
 
-                return false;
+                return true;
             }
 
         }

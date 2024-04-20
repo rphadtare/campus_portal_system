@@ -116,7 +116,7 @@ public class LoginController {
         if(flag){
             return "hod_approved";
         } else {
-            return "hod_approval_denied";
+            return "hod_approval_failed";
         }
     }
 
@@ -127,14 +127,14 @@ public class LoginController {
             @RequestParam("approval") String approval
     ) {
 
-        logger.info("Inside approve_hod_registration for " + approval + " of teacher id " + teacherId);
+        logger.info("Inside approveTeacherRegistration for " + approval + " of teacher id " + teacherId);
         boolean flag = service.teacherRegisterRequestAuthorization(hodId,teacherId,approval);
-        logger.info("approve_hod_registration for " + approval + " of teacher ID " + teacherId + " final result: " + flag);
+        logger.info("approveTeacherRegistration for " + approval + " of teacher ID " + teacherId + " final result: " + flag);
 
         if(flag){
-            return "hod_approved";
+            return "teacher_approved";
         } else {
-            return "hod_approval_denied";
+            return "teacher_approval_denied";
         }
     }
 
