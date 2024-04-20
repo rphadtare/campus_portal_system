@@ -12,6 +12,8 @@ public interface LoginDAO {
 
     public Login getLogin(int loginId);
 
+    public Login getLogin(int userType, String userName);
+
     public List<Login> getAllLogin();
 
     public List<Login> getAllLogin(int userTypeId);

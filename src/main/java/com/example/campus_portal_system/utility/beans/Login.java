@@ -15,6 +15,10 @@ public class Login {
         this.isDeleted = isDeleted;
     }
 
+    public Login(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }

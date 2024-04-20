@@ -40,14 +40,36 @@ public class LoginController {
         if (isValidUser) {
 
             switch (usertype){
-                case 1:
+                case 0:
 
                     model.addAttribute("user_name", name);
                     model.addAttribute("user_type", usertype);
 
-                    return campusStudentController.welcomeStudent();
+                    result = campusStudentController.welcomeStudent();
+                    break;
 
-                case 2:
+                case 3:
+                    result = "Successful_institute_admin_login";
+                    break;
+
+                case 4:
+                    result = "Successful_hod_login";
+                    break;
+
+                case 5:
+                    result = "Successful_class_teacher_login";
+                    break;
+
+                case 6:
+                    result = "Successful_hod_and_class_teacher_login";
+                    break;
+
+                case 7:
+                    result = "Successful_teacher_login";
+                    break;
+
+                case 8:
+                    result = "Successful_student_login";
                     break;
             }
 

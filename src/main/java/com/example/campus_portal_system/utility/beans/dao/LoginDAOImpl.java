@@ -20,14 +20,16 @@ public class LoginDAOImpl implements  LoginDAO {
     private final String SQL_CREATE_LOGIN = "insert into login(user_type," +
             "user_name, password" +
             "is_deleted)" +
-            "values(?,?,?,0)";
+            "values(?,?,?,1)";
 
     private final String SQL_DELETE_LOGIN = "update login" +
             "set" +
-            "is_deleted = 1" +
+            "is_deleted = 0" +
             "where id = ?";
 
     private final String SQL_GET_LOGIN = "select * from login where id = ?";
+
+    private final String SQL_GET_LOGIN_BY_NAME = "select * from login where user_type = ? and user_name = ? and is_deleted = 1";
 
     private final String SQL_GET_ALL_LOGIN = "select * from login";
 
@@ -64,8 +66,22 @@ public class LoginDAOImpl implements  LoginDAO {
 
     @Override
     public Login getLogin(int loginId) {
-        logger.info("Inside getLogin ...");
+        logger.info("Inside getLogin " + loginId);
         return jdbcTemplate.queryForObject(SQL_GET_LOGIN, new Object[] {loginId}, new LoginMapper());
+    }
+
+    @Override
+    public Login getLogin(int userType, String userName) {
+        logger.info("Inside getLogin for " + userName);
+        Login login = new Login(-1);
+
+        try {
+            login = jdbcTemplate.queryForObject(SQL_GET_LOGIN_BY_NAME, new Object[]{userType, userName}, new LoginMapper());
+        } catch (Exception e){
+            logger.severe("Inside getLogin for " + userName + " exception occurred " + e.getMessage());
+        }
+
+        return login;
     }
 
     @Override

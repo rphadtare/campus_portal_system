@@ -30,21 +30,26 @@ public class LoginService {
 
     public boolean validateUser(String userid, String password, int usertype) {
 
-        logger.info("Inside validateUser ...");
+        logger.info("Inside validateUser " + userid + " password: " + password + " userType: " + usertype);
         boolean result = true;
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DatabaseConfig.class);
+        LoginDAO loginDAO = context.getBean(LoginDAO.class);
+        Login login = loginDAO.getLogin(usertype,userid);
 
-
-        switch (usertype){
-            case 1:
-                result = userid.equalsIgnoreCase("rutu")
-                            && password.equalsIgnoreCase("Rutu@123$");
-                break;
-
-            default:
+        if(login.getId() == -1){
+            logger.severe("validateUser failed as no such login information exist with username " + userid
+            + " and userType " + usertype);
+            result = false;
+        } else {
+            if(login.getUserPassword().equals(password)){
+                result = true;
+                logger.info("validateUser successful - " + userid + " password: " + password + " userType: " + usertype);
+            } else {
+                logger.severe("validateUser failed as no such login password is not correct for username " + userid
+                        + " and userType " + usertype);
                 result = false;
-                break;
+            }
         }
-
         return result;
 
     }
