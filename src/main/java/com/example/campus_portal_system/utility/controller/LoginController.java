@@ -98,7 +98,7 @@ public class LoginController {
         if(flag){
             return "admin_approved";
         } else {
-            return "admin_approval_denied";
+            return "admin_approval_failed";
         }
     }
 

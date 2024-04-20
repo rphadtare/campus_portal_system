@@ -178,7 +178,7 @@ public class LoginService {
                 emailService.SendEmail(admin.getEmailId(),
                         institute.getEmail_id(), "Notification - registration request denied !!", message);
 
-                return false;
+                return true;
             }
 
         }
